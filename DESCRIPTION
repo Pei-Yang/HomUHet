@@ -1,0 +1,19 @@
+Package: HomUHet
+Title: Identifying and Separating Homogeneous and Heterogeneous Predictors
+Version: 0.0.0.9000
+Date: 2020-01-22
+Authors@R: Authors@R: c(person(“Pei S.”, “Yang”, role = c("aut", "cre"),
+                     email = “yang.1736@osu.edu”))
+Author: Pei S. Yang [aut, cre]
+Maintainer: Pei S. Yang <yang.1736@osu.edu>
+Depends: tidyverse, glmnet, HDeconometrics, gglasso
+Description: This package contains functions to identify and separate predictors with homogeneous or heterogeneous effects across datasets in ultra high-dimensional settings.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+
+
+
