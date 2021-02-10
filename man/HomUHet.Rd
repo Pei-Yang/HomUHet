@@ -16,7 +16,7 @@ HomUHet(data, sid, solution_path = FALSE, y_name = NULL)
 \item{y_name}{if needed, a response variable name for the solution path plots. Default is NULL.}
 }
 \value{
-names of Homogeneous, Heterogeneous predictors, estimates of predictors, solution path plots
+names of Homogeneous and Heterogeneous predictors, estimates of predictors, solution path plots
 }
 \description{
 This function outputs the names of predictors with homogeneous or heterogeneous predictors across multiple data sets, the estimates of predictors, and solution plots

@@ -7,7 +7,7 @@
 #' @param sid the study id for each observation in data
 #' @param solution_path TRUE if the user wishes to output the solution path plots. Default is FALSE
 #' @param y_name if needed, a response variable name for the solution path plots. Default is NULL.
-#' @return names of Homogeneous, Heterogeneous predictors, estimates of predictors, solution path plots
+#' @return names of Homogeneous and Heterogeneous predictors, estimates of predictors, solution path plots
 #'
 #' @examples
 #' HomUHet(data=data,sid=sid,solution_path=FALSE,y_name=NULL)
