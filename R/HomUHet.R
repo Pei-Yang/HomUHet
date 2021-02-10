@@ -8,16 +8,21 @@
 #' @param solution_path TRUE if the user wishes to output the solution path plots. Default is FALSE
 #' @param y_name if needed, a response variable name for the solution path plots. Default is NULL.
 #' @return names of Homogeneous and Heterogeneous predictors, estimates of predictors, solution path plots
+#' 
+#' @importFrom dplyr arrange group_by summarise_all
+#' @importFrom HDeconometrics ic.glmnet
+#' @importFrom graphics abline plot
+#' @importFrom stats coef lm logLik var
+#' @import glmnet
+#' @import gglasso
 #'
-#' @examples
-#' HomUHet(data=data,sid=sid,solution_path=FALSE,y_name=NULL)
-#'
+#' 
 #' @export
 HomUHet<-function(data,sid,solution_path=FALSE,y_name=NULL){
   ##### sorting data by study
   
   data=as.data.frame(cbind(sid,data))
-  data=tidyverse::arrange(data,sid)
+  data=dplyr::arrange(data,sid)
   n=as.data.frame(table(sid))[,2]
   x=as.matrix(data[,-c(1:2)])
   y=data[,2]
@@ -220,7 +225,7 @@ HomUHet<-function(data,sid,solution_path=FALSE,y_name=NULL){
   ebic.fitted.delta=as.data.frame(cbind(as.factor(group),ebic.coef))
   
   
-  ebic.selection=ebic.fitted.delta%>%tidyverse::group_by(V1)%>%tidyverse::summarise_all(var)### sd not working
+  ebic.selection=ebic.fitted.delta%>%dplyr::group_by(V1)%>%dplyr::summarise_all(var)### sd not working
   
   
   

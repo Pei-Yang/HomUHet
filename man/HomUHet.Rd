@@ -21,7 +21,3 @@ names of Homogeneous and Heterogeneous predictors, estimates of predictors, solu
 \description{
 This function outputs the names of predictors with homogeneous or heterogeneous predictors across multiple data sets, the estimates of predictors, and solution plots
 }
-\examples{
-HomUHet(data=data,sid=sid,solution_path=FALSE,y_name=NULL)
-
-}
