@@ -279,6 +279,5 @@ HomUHet<-function(data,sid,solution_path=FALSE,y_name=NULL){
   list(Homo=Homo,
        Heter=Heter,
        Homo_estimates=Homo_estimates,
-       Heter_estimates=Heter_estimates,
-       Solution_Path=Solution_Path)
+       Heter_estimates=Heter_estimates)
 }
