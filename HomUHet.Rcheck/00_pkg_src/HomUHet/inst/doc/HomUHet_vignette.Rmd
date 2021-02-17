@@ -1,6 +1,6 @@
 ---
 title: "HomUHet Vignette"
-output: rmarkdown::pdf_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{HomUHet Vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -45,6 +45,7 @@ knitr::opts_chunk$set(
 
 
 
+### **R Topics Documented**
 
 
 
