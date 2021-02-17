@@ -14,7 +14,7 @@
 #' This function outputs the names of predictors with homogeneous or heterogeneous predictors across multiple data sets, the estimates of predictors, and solution plots
 #'
 #' @param x the predictor matrix. a matrix of n x J containing observations from all studies for all predictors
-#' @param y the response variable. a vector of n observations for the response variable
+#' @param y the response variable following gaussian distribution. a vector of n observations for the response variable
 #' @param sid a vector of integers indexing the study id for each observation in data
 #' @return the names of identified predictors and their estimated effects
 #'  \item{Homo}{a character string of names of homogeneous predictors}
