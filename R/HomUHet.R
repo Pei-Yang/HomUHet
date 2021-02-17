@@ -3,9 +3,10 @@
 #' classify the predictors into homogeneous, heterogeneous and unassociated categories. outputs the solution path plots.
 #'
 #'
-#' The only function you're likely to need from \pkg{HomUHet} is
-#' \code{\link{HomUHet}}. Otherwise refer to the vignettes to see
-#' how to format the documentation.
+#' HomUHet can be used to identify and separates predictors with homogeneous or heterogeneous effect across multiple data sets
+#' through fitting penalized linear regression models in two steps.
+#' Applicable to Gaussian response variable and very high dimensional data
+#' where the number of predictors could be larger than the number of observations per data set.
 "_PACKAGE"
 #> [1] "_PACKAGE"
 #'
@@ -16,6 +17,7 @@
 #' @param x the predictor matrix. a matrix of n x J containing observations from all studies for all predictors
 #' @param y the response variable following gaussian distribution. a vector of n observations for the response variable
 #' @param sid a vector of integers indexing the study id for each observation in data
+#' @param solution_path_plot TRUE if outputting solution path plots is desired
 #' @return the names of identified predictors and their estimated effects
 #'  \item{Homo}{a character string of names of homogeneous predictors}
 #'  \item{Heter}{a character string of N=names of heterogeneous predictors}
@@ -24,12 +26,13 @@
 #' @importFrom dplyr arrange group_by summarise_all
 #' @importFrom graphics abline plot
 #' @importFrom stats coef lm logLik var
+#' @importFrom mvtnorm rmvnorm
 #' @import glmnet
 #' @import gglasso
 #'
 #'
 #' @export
-HomUHet<-function(x,y,sid){
+HomUHet<-function(x,y,sid,solution_path_plot=FALSE){
   ##### sorting data by study
   data=cbind(y,x)
   data=as.data.frame(cbind(sid,data))
@@ -263,6 +266,7 @@ HomUHet<-function(x,y,sid){
       Homo_estimates[r,]=c(Homo[r],rep(step1_estimates[Homo[r]],K))
     }
     Homo_estimates=as.matrix(Homo_estimates)
+    Homo_estimates=cbind(Homo_estimates,rep("Homogeneous", nrow(Homo_estimates)))
   } else {
     Homo_estimates=NULL
   }
@@ -275,38 +279,30 @@ HomUHet<-function(x,y,sid){
     }
 
     Heter_estimates=as.matrix(Heter_estimates)
+    Heter_estimates=cbind(Heter_estimates,rep("Heterogeneous", nrow(Heter_estimates)))
   } else {
     Heter_estimates=NULL
   }
 
-  Homo_estimates=cbind(Homo_estimates,rep("Homogeneous", nrow(Homo_estimates)))
-
-  Heter_estimates=cbind(Heter_estimates,rep("Heterogeneous", nrow(Heter_estimates)))
-
 
   coefficients=rbind(c("predictor",paste("study",seq(1:K),sep=""),"type"),
-                  Homo_estimates,
-                  Heter_estimates)
+                       Homo_estimates,
+                       Heter_estimates)
+
+if (solution_path_plot==TRUE){
+
+  y_name=names(y)
+  plot(beta.bic.fit,xvar = "lambda",main=paste(y_name,"step1",sep = " "))
+  abline(v=log(beta.bic.fit$lambda[Bic_optimal]))
+  plot(ebic.grp.fit,main=paste(y_name,"step2",sep = " "))
+  abline(v =log(ebic.lambda))
+}
+
+
 
   list(Homo=Homo,
        Heter=Heter,
-       coefficients)
-}
-
-#' Plot the solution path from HomUHet
-#'
-#' This function outputs the solution path plots
-#'
-#' @param fit the output object from HomUHet
-#' @param y_name if needed, a response variable name for the solution path plots. Default is NULL.
-#' @importFrom graphics abline plot
-#' @return solution path plots from Step 1 and Step 2
-#' @export
-HomUHet.plot<-function(fit,y_name=NULL){
-  step1_plot=plot(beta.bic.fit,xvar = "lambda",main=paste(y_name,"step1",sep = " "))
-  abline(v=log(beta.bic.fit$lambda[Bic_optimal]))
-  step2_plot=plot(ebic.grp.fit,main=paste(y_name,"step2",sep = " "))
-  abline(v =log(ebic.lambda))
+       coefficients=coefficients)
 }
 
 #' simulate multiple data sets with both homogeneous and heterogeneous effects from the predictors
@@ -321,7 +317,7 @@ HomUHet.plot<-function(fit,y_name=NULL){
 #' @param sigma a positive number. controlling the added noise to the simulated response variable
 #' @param nlower the lower bound of the K sample sizes
 #' @param nupper the upper bound of the K sample sizes
-#' @importFrom MASS mvrnorm
+#' @importFrom mvtnorm rmvnorm
 #' @return the simulated data
 #' \item{x}{an n x J matrix containing simulated predictors}
 #' \item{y}{an n-length vector of simulated response variable}
@@ -498,7 +494,8 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
       n=c(n,n.temp)
       sid.temp=rep(t+1,n.temp)
       sid=c(sid,sid.temp)
-      temp.x=MASS::mvrnorm(n.temp,mu=rep(0,J),Sigma=Sigma)
+      temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                     method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
       temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])
       temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
       temp.y=temp.y
@@ -518,8 +515,10 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
         temp.x2=matrix(0,ncol=J,nrow=n.temp)
 
 
-        temp.z1=MASS:mvrnorm(n.temp,mu=rep(0,J),Sigma=Sigma)
-        temp.z2=MASS:mvrnorm(n.temp,mu=rep(0,J),Sigma=Sigma)
+        temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+        method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+        temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+        method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
 
         for (j in 1:J){
 
@@ -548,7 +547,7 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
   n=n[-1]
   sid=sid[-1]
 
-  return(list(x,y,sid))
+  list(x=x,y=y,sid=sid)
 }
 
 

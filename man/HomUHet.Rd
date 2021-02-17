@@ -4,14 +4,16 @@
 \alias{HomUHet}
 \title{fit a two-step penalized regression model}
 \usage{
-HomUHet(x, y, sid)
+HomUHet(x, y, sid, solution_path_plot = FALSE)
 }
 \arguments{
 \item{x}{the predictor matrix. a matrix of n x J containing observations from all studies for all predictors}
 
-\item{y}{the response variable. a vector of n observations for the response variable}
+\item{y}{the response variable following gaussian distribution. a vector of n observations for the response variable}
 
 \item{sid}{a vector of integers indexing the study id for each observation in data}
+
+\item{solution_path_plot}{TRUE if outputting solution path plots is desired}
 }
 \value{
 the names of identified predictors and their estimated effects

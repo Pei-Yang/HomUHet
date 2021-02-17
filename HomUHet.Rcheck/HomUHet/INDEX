@@ -1,7 +1,0 @@
-HomUHet                 fit a two-step penalized regression model
-HomUHet-package         identify homogeneous and heterogeneous effects
-                        of predictors in multiple datasets
-HomUHet.plot            Plot the solution path from HomUHet
-HomUHet.sim             simulate multiple data sets with both
-                        homogeneous and heterogeneous effects from the
-                        predictors

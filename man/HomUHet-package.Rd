@@ -9,9 +9,10 @@
 classify the predictors into homogeneous, heterogeneous and unassociated categories. outputs the solution path plots.
 }
 \details{
-The only function you're likely to need from \pkg{HomUHet} is
-\code{\link{HomUHet}}. Otherwise refer to the vignettes to see
-how to format the documentation.
+HomUHet can be used to identify and separates predictors with homogeneous or heterogeneous effect across multiple data sets
+through fitting penalized linear regression models in two steps.
+Applicable to Gaussian response variable and very high dimensional data
+where the number of predictors could be larger than the number of observations per data set.
 }
 \author{
 \strong{Maintainer}: Pei S. Yang \email{yang.1736@osu.edu}
