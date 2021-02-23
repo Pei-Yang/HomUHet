@@ -1,0 +1,159 @@
+* using log directory ‘/Users/sephinapeiyang/Documents/R packages/HomUHet.Rcheck’
+* using R version 4.0.3 (2020-10-10)
+* using platform: x86_64-apple-darwin17.0 (64-bit)
+* using session charset: UTF-8
+* using options ‘--ignore-vignettes --as-cran’
+* checking for file ‘HomUHet/DESCRIPTION’ ... OK
+* this is package ‘HomUHet’ version ‘0.0.0.9000’
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking serialization versions ... OK
+* checking whether package ‘HomUHet’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+HomUHet: no visible global function definition for ‘%>%’
+HomUHet: no visible binding for global variable ‘V1’
+HomUHet.sim: no visible global function definition for ‘toeplitz’
+HomUHet.sim: no visible global function definition for ‘runif’
+HomUHet.sim: no visible global function definition for ‘rnorm’
+HomUHet.sim: no visible global function definition for ‘qnorm’
+HomUHet.sim.beta : heter_gen: no visible global function definition for
+  ‘rnorm’
+HomUHet.sim.beta : heter_gen: no visible global function definition for
+  ‘runif’
+Undefined global functions or variables:
+  %>% V1 qnorm rnorm runif toeplitz
+Consider adding
+  importFrom("stats", "qnorm", "rnorm", "runif", "toeplitz")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... WARNING
+Data codoc mismatches from documentation object 'HomUHet_data':
+Variables in data frame 'HomUHet_data'
+  Code: Pred_V1 Pred_V10 Pred_V100 Pred_V101 Pred_V102 Pred_V103
+        Pred_V104 Pred_V105 Pred_V106 Pred_V107 Pred_V108 Pred_V109
+        Pred_V11 Pred_V110 Pred_V111 Pred_V112 Pred_V113 Pred_V114
+        Pred_V115 Pred_V116 Pred_V117 Pred_V118 Pred_V119 Pred_V12
+        Pred_V120 Pred_V121 Pred_V122 Pred_V123 Pred_V124 Pred_V125
+        Pred_V126 Pred_V127 Pred_V128 Pred_V129 Pred_V13 Pred_V130
+        Pred_V131 Pred_V132 Pred_V133 Pred_V134 Pred_V135 Pred_V136
+        Pred_V137 Pred_V138 Pred_V139 Pred_V14 Pred_V140 Pred_V141
+        Pred_V142 Pred_V143 Pred_V144 Pred_V145 Pred_V146 Pred_V147
+        Pred_V148 Pred_V149 Pred_V15 Pred_V150 Pred_V151 Pred_V152
+        Pred_V153 Pred_V154 Pred_V155 Pred_V156 Pred_V157 Pred_V158
+        Pred_V159 Pred_V16 Pred_V160 Pred_V161 Pred_V162 Pred_V163
+        Pred_V164 Pred_V165 Pred_V166 Pred_V167 Pred_V168 Pred_V169
+        Pred_V17 Pred_V170 Pred_V171 Pred_V172 Pred_V173 Pred_V174
+        Pred_V175 Pred_V176 Pred_V177 Pred_V178 Pred_V179 Pred_V18
+        Pred_V180 Pred_V181 Pred_V182 Pred_V183 Pred_V184 Pred_V185
+        Pred_V186 Pred_V187 Pred_V188 Pred_V189 Pred_V19 Pred_V190
+        Pred_V191 Pred_V192 Pred_V193 Pred_V194 Pred_V195 Pred_V196
+        Pred_V197 Pred_V198 Pred_V199 Pred_V2 Pred_V20 Pred_V200
+        Pred_V201 Pred_V202 Pred_V203 Pred_V204 Pred_V205 Pred_V206
+        Pred_V207 Pred_V208 Pred_V209 Pred_V21 Pred_V210 Pred_V211
+        Pred_V212 Pred_V213 Pred_V214 Pred_V215 Pred_V216 Pred_V217
+        Pred_V218 Pred_V219 Pred_V22 Pred_V220 Pred_V221 Pred_V222
+        Pred_V223 Pred_V224 Pred_V225 Pred_V226 Pred_V227 Pred_V228
+        Pred_V229 Pred_V23 Pred_V230 Pred_V231 Pred_V232 Pred_V233
+        Pred_V234 Pred_V235 Pred_V236 Pred_V237 Pred_V238 Pred_V239
+        Pred_V24 Pred_V240 Pred_V241 Pred_V242 Pred_V243 Pred_V244
+        Pred_V245 Pred_V246 Pred_V247 Pred_V248 Pred_V249 Pred_V25
+        Pred_V250 Pred_V251 Pred_V252 Pred_V253 Pred_V254 Pred_V255
+        Pred_V256 Pred_V257 Pred_V258 Pred_V259 Pred_V26 Pred_V260
+        Pred_V261 Pred_V262 Pred_V263 Pred_V264 Pred_V265 Pred_V266
+        Pred_V267 Pred_V268 Pred_V269 Pred_V27 Pred_V270 Pred_V271
+        Pred_V272 Pred_V273 Pred_V274 Pred_V275 Pred_V276 Pred_V277
+        Pred_V278 Pred_V279 Pred_V28 Pred_V280 Pred_V281 Pred_V282
+        Pred_V283 Pred_V284 Pred_V285 Pred_V286 Pred_V287 Pred_V288
+        Pred_V289 Pred_V29 Pred_V290 Pred_V291 Pred_V292 Pred_V293
+        Pred_V294 Pred_V295 Pred_V296 Pred_V297 Pred_V298 Pred_V299
+        Pred_V3 Pred_V30 Pred_V300 Pred_V301 Pred_V302 Pred_V303
+        Pred_V304 Pred_V305 Pred_V306 Pred_V307 Pred_V308 Pred_V309
+        Pred_V31 Pred_V310 Pred_V311 Pred_V312 Pred_V313 Pred_V314
+        Pred_V315 Pred_V316 Pred_V317 Pred_V318 Pred_V319 Pred_V32
+        Pred_V320 Pred_V321 Pred_V322 Pred_V323 Pred_V324 Pred_V325
+        Pred_V326 Pred_V327 Pred_V328 Pred_V329 Pred_V33 Pred_V330
+        Pred_V331 Pred_V332 Pred_V333 Pred_V334 Pred_V335 Pred_V336
+        Pred_V337 Pred_V338 Pred_V339 Pred_V34 Pred_V340 Pred_V341
+        Pred_V342 Pred_V343 Pred_V344 Pred_V345 Pred_V346 Pred_V347
+        Pred_V348 Pred_V349 Pred_V35 Pred_V350 Pred_V351 Pred_V352
+        Pred_V353 Pred_V354 Pred_V355 Pred_V356 Pred_V357 Pred_V358
+        Pred_V359 Pred_V36 Pred_V360 Pred_V361 Pred_V362 Pred_V363
+        Pred_V364 Pred_V365 Pred_V366 Pred_V367 Pred_V368 Pred_V369
+        Pred_V37 Pred_V370 Pred_V371 Pred_V372 Pred_V373 Pred_V374
+        Pred_V375 Pred_V376 Pred_V377 Pred_V378 Pred_V379 Pred_V38
+        Pred_V380 Pred_V381 Pred_V382 Pred_V383 Pred_V384 Pred_V385
+        Pred_V386 Pred_V387 Pred_V388 Pred_V389 Pred_V39 Pred_V390
+        Pred_V391 Pred_V392 Pred_V393 Pred_V394 Pred_V395 Pred_V396
+        Pred_V397 Pred_V398 Pred_V399 Pred_V4 Pred_V40 Pred_V400
+        Pred_V401 Pred_V402 Pred_V403 Pred_V404 Pred_V405 Pred_V406
+        Pred_V407 Pred_V408 Pred_V409 Pred_V41 Pred_V410 Pred_V411
+        Pred_V412 Pred_V413 Pred_V414 Pred_V415 Pred_V416 Pred_V417
+        Pred_V418 Pred_V419 Pred_V42 Pred_V420 Pred_V421 Pred_V422
+        Pred_V423 Pred_V424 Pred_V425 Pred_V426 Pred_V427 Pred_V428
+        Pred_V429 Pred_V43 Pred_V430 Pred_V431 Pred_V432 Pred_V433
+        Pred_V434 Pred_V435 Pred_V436 Pred_V437 Pred_V438 Pred_V439
+        Pred_V44 Pred_V440 Pred_V441 Pred_V442 Pred_V443 Pred_V444
+        Pred_V445 Pred_V446 Pred_V447 Pred_V448 Pred_V449 Pred_V45
+        Pred_V450 Pred_V451 Pred_V452 Pred_V453 Pred_V454 Pred_V455
+        Pred_V456 Pred_V457 Pred_V458 Pred_V459 Pred_V46 Pred_V460
+        Pred_V461 Pred_V462 Pred_V463 Pred_V464 Pred_V465 Pred_V466
+        Pred_V467 Pred_V468 Pred_V469 Pred_V47 Pred_V470 Pred_V471
+        Pred_V472 Pred_V473 Pred_V474 Pred_V475 Pred_V476 Pred_V477
+        Pred_V478 Pred_V479 Pred_V48 Pred_V480 Pred_V481 Pred_V482
+        Pred_V483 Pred_V484 Pred_V485 Pred_V486 Pred_V487 Pred_V488
+        Pred_V489 Pred_V49 Pred_V490 Pred_V491 Pred_V492 Pred_V493
+        Pred_V494 Pred_V495 Pred_V496 Pred_V497 Pred_V498 Pred_V499
+        Pred_V5 Pred_V50 Pred_V500 Pred_V51 Pred_V52 Pred_V53 Pred_V54
+        Pred_V55 Pred_V56 Pred_V57 Pred_V58 Pred_V59 Pred_V6 Pred_V60
+        Pred_V61 Pred_V62 Pred_V63 Pred_V64 Pred_V65 Pred_V66 Pred_V67
+        Pred_V68 Pred_V69 Pred_V7 Pred_V70 Pred_V71 Pred_V72 Pred_V73
+        Pred_V74 Pred_V75 Pred_V76 Pred_V77 Pred_V78 Pred_V79 Pred_V8
+        Pred_V80 Pred_V81 Pred_V82 Pred_V83 Pred_V84 Pred_V85 Pred_V86
+        Pred_V87 Pred_V88 Pred_V89 Pred_V9 Pred_V90 Pred_V91 Pred_V92
+        Pred_V93 Pred_V94 Pred_V95 Pred_V96 Pred_V97 Pred_V98 Pred_V99
+        study_label y
+  Docs: Study_label y
+
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking files in ‘vignettes’ ... SKIPPED
+* checking examples ... NONE
+* checking PDF version of manual ... OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 1 WARNING, 1 NOTE
