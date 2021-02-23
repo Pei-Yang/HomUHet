@@ -669,7 +669,7 @@ return(data)
 #'  \item{heter_index}{a vector containing the column numbers of homogeneous coefficients in the coefficient matrix}
 #' @export
 HomUHet.sim.beta<-function(J, K, homo_coef, heter_distr=c("Gaussian","Uniform"),
-                           heter_coef_param=rbind(c(1,2,3),c(2,1,2), c(2,2,3))){
+                           heter_coef_param){
 
   if (nrow(homo_coef) != 2){
     stop("Incorrect dimension of homo_coef ")

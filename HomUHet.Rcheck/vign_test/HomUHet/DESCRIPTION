@@ -1,0 +1,21 @@
+Package: HomUHet
+Title: Identifying and Separating Homogeneous and Heterogeneous
+        Predictors
+Version: 0.0.0.9000
+Date: 2020-01-22
+Authors@R: c(person("Pei S.", "Yang", role = c("aut", "cre"),
+                     email = "yang.1736@osu.edu"))
+Author: Pei S. Yang [aut, cre]
+Maintainer: Pei S. Yang <yang.1736@osu.edu>
+Depends: glmnet, gglasso, dplyr, R (>= 2.10)
+Imports: mvtnorm, stats
+Description: This package contains functions to identify and separate predictors with homogeneous or heterogeneous effects across datasets.
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2021-02-23 04:30:17 UTC; sephinapeiyang

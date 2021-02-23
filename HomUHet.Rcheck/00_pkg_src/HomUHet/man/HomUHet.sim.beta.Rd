@@ -9,7 +9,7 @@ HomUHet.sim.beta(
   K,
   homo_coef,
   heter_distr = c("Gaussian", "Uniform"),
-  heter_coef_param = rbind(c(1, 2, 3), c(2, 1, 2), c(2, 2, 3))
+  heter_coef_param
 )
 }
 \arguments{
