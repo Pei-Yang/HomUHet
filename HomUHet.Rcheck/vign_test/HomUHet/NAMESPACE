@@ -2,7 +2,6 @@
 
 export(HomUHet)
 export(HomUHet.sim)
-export(HomUHet.sim.beta)
 import(gglasso)
 import(glmnet)
 importFrom(dplyr,arrange)

@@ -75,12 +75,11 @@ No file Rd2.aux.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [1{/usr/local/texl
 ive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [2]
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [3]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 No file Rd2.ind.
-[4]
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux)
+[3]
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -94,7 +93,7 @@ xlive/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2017
 /texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dis
 t/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/ty
 pe1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (4 pages, 79688 bytes).
+Output written on Rd2.pdf (3 pages, 78158 bytes).
 Transcript written on Rd2.log.
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -159,29 +158,28 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu)))
 Writing index file Rd2.idx
 
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [2]
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [3]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 No file Rd2.ind.
-[4]
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
+[3]
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
 enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc
 }</usr/local/texlive/2017/texmf-dist/fonts/type1/public/inconsolata/Inconsolata
 -zi4r.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.p
@@ -189,12 +187,12 @@ fb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/l
 ocal/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texli
 ve/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/te
 xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (4 pages, 80158 bytes).
+Output written on Rd2.pdf (3 pages, 78542 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2017] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (5 entries accepted, 0 rejected).
-Sorting entries....done (12 comparisons).
-Generating output file Rd2.ind....done (13 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (4 entries accepted, 0 rejected).
+Sorting entries....done (10 comparisons).
+Generating output file Rd2.ind....done (12 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
@@ -260,29 +258,28 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu)))
 Writing index file Rd2.idx
 
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [2]
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [3]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.ind [4] [5])
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.ind [3] [4])
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -297,12 +294,12 @@ live/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2017/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (5 pages, 87989 bytes).
+Output written on Rd2.pdf (4 pages, 86319 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2017] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (5 entries accepted, 0 rejected).
-Sorting entries....done (12 comparisons).
-Generating output file Rd2.ind....done (13 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (4 entries accepted, 0 rejected).
+Sorting entries....done (10 comparisons).
+Generating output file Rd2.ind....done (12 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
@@ -368,29 +365,28 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu)))
 Writing index file Rd2.idx
 
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [2]
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [3]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.ind [4] [5])
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.ind [3] [4])
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
 enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc
 }</usr/local/texlive/2017/texmf-dist/fonts/type1/public/inconsolata/Inconsolata
 -zi4r.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
@@ -399,12 +395,12 @@ b></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/lo
 cal/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/tex
 mf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (5 pages, 88375 bytes).
+Output written on Rd2.pdf (4 pages, 86885 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2017] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (5 entries accepted, 0 rejected).
-Sorting entries....done (12 comparisons).
-Generating output file Rd2.ind....done (13 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (4 entries accepted, 0 rejected).
+Sorting entries....done (10 comparisons).
+Generating output file Rd2.ind....done (12 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
@@ -470,29 +466,28 @@ Package hyperref Warning: Option `pagebackref' has already been used,
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1enc.dfu)))
 Writing index file Rd2.idx
 
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1ptm.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.out) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/t1phv.fd)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.toc) (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [2]
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [3]
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.ind [4] [5])
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpVvNQ9T/Rd2pdfe1c8
-63dcf74d/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.ind [3] [4])
+(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmpwbbEqL/Rd2pdff54e
+5edbe978/Rd2.aux) ){/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.
 enc}{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc
 }</usr/local/texlive/2017/texmf-dist/fonts/type1/public/inconsolata/Inconsolata
 -zi4r.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
@@ -501,8 +496,8 @@ b></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/lo
 cal/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/tex
 mf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (5 pages, 88369 bytes).
+Output written on Rd2.pdf (4 pages, 86875 bytes).
 Transcript written on Rd2.log.
 Saving output to ‘HomUHet-manual.pdf’ ...
 Done
-You may want to clean up by 'rm -Rf /var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T//RtmpVvNQ9T/Rd2pdfe1c863dcf74d'
+You may want to clean up by 'rm -Rf /var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T//RtmpwbbEqL/Rd2pdff54e5edbe978'

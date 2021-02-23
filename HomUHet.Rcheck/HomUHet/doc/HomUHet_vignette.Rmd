@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
 ```
 **Type** Package
 
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 **Date**: 2020-01-22
 
-**Depends** tidyverse, glmnet, HDeconometrics, gglasso
+**Depends** tidyverse, glmnet, gglasso
 
 **Suggests** knitr, rmarkdown
 
@@ -37,7 +37,7 @@ knitr::opts_chunk$set(
 
 **RoxygenNote** 7.1.1
 
-**Author** Pei S. Yang [aut, cre]
+**Author** Pei S. Yang [aut, cre],Shili Lin [aut], Lo-Bin Chang [aut]
 
 **Maintainer** Pei S. Yang \<yang.1736@osu.edu\>
 
@@ -66,7 +66,7 @@ HomUHet can be used to identify and separates predictors with homogeneous or het
 
 ## 2.1 Input data for HomUHet
 
-HomUHet<-function(data, solution_path_plot=FALSE)
+HomUHet <- function (data, solution_path_plot = FALSE)
 
 
 <br>
@@ -77,29 +77,29 @@ HomUHet<-function(data, solution_path_plot=FALSE)
 ```{r}
 library(HomUHet)
 data(HomUHet_data)
-HomUHet_data[1:5,1:4]# input data of 4 studies, same set of 500 predictors for each study.
+HomUHet_data[1:5,1:4]
+# input data of 4 studies, same set of 500 predictors for each study. 
+#The first column is the study label, the second column is the response variable y, 
+#and Pred_V1 and Pred_V2 are the first 2 predictors.
 
-dim(HomUHet_data)
+unique(HomUHet_data$study_label) 
+# study_label contains 4 different integers labeling the studies. 
 
-unique(HomUHet_data$study_label) # study_label contains 4 different integers labeling the studies. 
-
-x1=HomUHet_data[HomUHet_data$study_label==1,] # extracting observations from study 1
+x1=HomUHet_data[HomUHet_data$study_label==1,] 
+# extracting observations from study 1
 (colMeans(x1[,-(1:2)]))[1:5] # checking if the means are 0. showing the first 5 predictors here.
 (apply(x1[,-(1:2)],2,sd))[1:5] # checking if the variances are 1. showing first 5 here.
 
 ```
 In this sample data, the first column contains the study labels. For example, study_label=1 indicates that row 1 is an observation from study 1. The second column is the response variable, y. Starting from the third column are the predictors, which are standardized. 
 
-**solution_path_plot** TRUE if outputting solution path plots is desired
+**solution_path_plot** TRUE if outputting solution path plots is desired. 
 
-```{r}
- HomUHet(data=HomUHet_data,solution_path_plot=TRUE)
-```
 
 ## 2.2 Output values from HomUHet
 
 <br>
-**Values** the output is a list containing the following elements
+**Values** the outputs are two solution path plots (if checked TRUE in solution_path_plot) and a list containing the following elements
 
 **Homo** is a vector containing the names (if provided in the input data) or column numbers of identified homogeneous predictors.
 
@@ -108,56 +108,66 @@ In this sample data, the first column contains the study labels. For example, st
 **coefficients** a matrix containing the estimated coefficients for the identified homogeneous or heterogeneous predictors. The estimates of a homogeneous predictor are identical across studies
 
 ```{r}
-fit=HomUHet(data=HomUHet_data)
-fit$Homo # the identified homogeneous predictors
+fit=HomUHet(data=HomUHet_data, solution_path_plot = TRUE)
+fit$Homo # the identified homogeneous predictors (names are not provided so these are column names)
 fit$Heter # the identified heterogeneous predictors
-fit$coefficients[1:2,] # the estimated coefficients
-fit$coefficients[15:17,] # the estimated coefficients
+(fit$coefficients[(fit$coefficients)$type=="Homogeneous",])[1:5,] 
+# some of the estimated homogeneous coefficients 
+(fit$coefficients[(fit$coefficients)$type=="Heterogeneous",])[1:5,] 
+# some of the estimated coefficients
 
 ```
 
+The vertical black lines in the two solution path plots mark the values of lambda used by HomUHet in two steps to generate the outputted values. 
 
 # 3.1 Simulating multiple data sets 
 
-HomUHet.sim<-function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL,
-                      rho=0.5,sigma=2, level=c("l","m","e"),
-                      nlower=50,nupper=300, allele_freq)
+HomUHet.sim <- function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL, rho=0.5, sigma, level=c("l", "m", "e"), nlower, nupper, allele_freq)
 
 <br>
 **Arguments**
 
-**J** is the number of predictors. J should be at least 300 for this function to work.
+**Pred_type** indicates which type of predictor the user wishes to simulate.
 
-**K** is the number of studies. choose between 4 and 10.
+**J** is the number of predictors.
 
-**level** represents the level of heterogeneity in the effects of predictors. "l" stands for low, "m" stands for medium, and "h" stands for high.
+**K** is the number of studies.
 
-**beta**
+**beta** the coefficient matrix of dimension $K \times J$ containing coefficients for the homogeneous, heterogeneous and unassociated predictors.
 
-**rho** should be a number between 0 and 1. This controls the degree of correlation between predictors
+**level** represents the level of heterogeneity in the effects of predictors. "l" stands for low, "m" stands for medium, and "h" stands for high. used in a default example and ignored if beta is supplied.
 
-**sigma** should be a positive number. This controls the added noise to the simulated response variable
+**rho** should be a number between 0 and 1. This controls the degree of correlation between predictors.
+
+**sigma** should be a positive number. This controls the added noise to the simulated response variable.
 
 **nlower** sets the lower bound of the K sample sizes. The sample size for each study is picked from a uniform distribution with lower bound equal to nlower and upper bound equal to nupper
 
 **nupper** sets the upper bound of the K sample sizes
 
-**allele_freq**
+**allele_freq** a J-length vector containing the allele frequencies of the $J$ predictors. required only if Pred_type is $"SNP"$.
+
+the following shows an example where 3 studies and 12 SNP predictors are to be generated. Among the 12 predictors, the first predictor has homogeneous effects (all equal to 2) and the $11^{th}$ predictor has heterogeneous effects (2, 4, 6, respectively in the 3 studies).
+
+```{r}
+beta=cbind(c(2,2,2), matrix(0,ncol=10,nrow=3),c(2,4,6))
+# constructing a beta matrix
+K=nrow(beta) # the number of studies
+J=ncol(beta) # the number of predictors
+allele_freq=runif(J,0.05,0.5) # allele frequency 
+mydata=HomUHet.sim(Pred_type="SNP", J=J, K=K, beta=beta,
+                      rho=0.5,sigma=2,
+                      nlower=50,nupper=200, allele_freq=allele_freq)
+
+mydata[1:2,1:5] # showing the first few lines and columns of the output data.
+
+```
 
 <br>
-**Values**
-
-**x** is a matrix of predictors
-
-**y** is a vector of response variable which is from gaussian distribution.
-
-**study_label** is a vector of study labels taking on integers.
+**value ** The output is a data frame containing, in that order, the simulated study label, response variable and predictors.
 
 
-# 3.2 simulating coefficients
 
-HomUHet.sim.beta<-function(J, K, homo_coef, heter_distr=c("Gaussian","Uniform"),
-                           heter_coef_param)
 
 
 

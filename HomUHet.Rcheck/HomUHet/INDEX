@@ -2,7 +2,5 @@ HomUHet                 fit a two-step penalized regression model
 HomUHet.sim             simulate multiple data sets with both
                         homogeneous and heterogeneous effects from the
                         predictors
-HomUHet.sim.beta        simulates homogeneous and heterogeneous
-                        coefficients of predictors
 HomUHet_data            simulated data to be used as demonstration for
                         HomUHet package
