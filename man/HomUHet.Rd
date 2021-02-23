@@ -4,14 +4,11 @@
 \alias{HomUHet}
 \title{fit a two-step penalized regression model}
 \usage{
-HomUHet(x, y, sid, solution_path_plot = FALSE)
+HomUHet(data, solution_path_plot = FALSE)
 }
 \arguments{
-\item{x}{the predictor matrix. a matrix of n x J containing observations from all studies for all predictors}
-
-\item{y}{the response variable following gaussian distribution. a vector of n observations for the response variable}
-
-\item{sid}{a vector of integers indexing the study id for each observation in data}
+\item{data}{The input dataframe containing observations from all studies where the first column is the study label,
+the second column is the response variable and the following columns are the predictors.}
 
 \item{solution_path_plot}{TRUE if outputting solution path plots is desired}
 }
@@ -19,7 +16,7 @@ HomUHet(x, y, sid, solution_path_plot = FALSE)
 the names of identified predictors and their estimated effects
 \item{Homo}{a character string of names of homogeneous predictors}
 \item{Heter}{a character string of N=names of heterogeneous predictors}
-\item{coefficients}{estimated coefficients of the homogeneous and heterogeneous predictors in K studies}
+\item{coefficients}{a data frame containing estimated coefficients of the homogeneous and heterogeneous predictors in K studies}
 }
 \description{
 This function outputs the names of predictors with homogeneous or heterogeneous predictors across multiple data sets, the estimates of predictors, and solution plots

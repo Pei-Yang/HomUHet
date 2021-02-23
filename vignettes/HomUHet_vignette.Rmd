@@ -64,7 +64,7 @@ HomUHet can be used to identify and separates predictors with homogeneous or het
 
 ## 2.1 Input data for HomUHet
 
-HomUHet<-function(x,y,sid, solution_path_plot=FALSE)
+HomUHet<-function(x,y,study_label, solution_path_plot=FALSE)
 
 
 <br>
@@ -74,25 +74,26 @@ HomUHet<-function(x,y,sid, solution_path_plot=FALSE)
 
 ```{r}
 library(HomUHet)
-mydata=HomUHet.sim(Pred_type="SNP",J=500,K=4,level="h",
+mydata=HomUHet.sim(Pred_type="SNP",J=500,K=4,level="h",beta=NULL,
                    rho=0.5,sigma=2,nlower=50,nupper=300) 
 # simulating data of 4 studies with varying sample sizes, 500 predictors for each study.
 x=mydata$x # the standardized predictor matrix 
 y=mydata$y # the response variable 
-sid=mydata$sid # the study labels 
-x1=x[sid==1,] # extracting observations from study 1
+study_label=mydata$study_label # the study labels 
+x1=x[study_label==1,] # extracting observations from study 1
 (colMeans(x1))[1:5] # checking if the means are 0. showing first 5 here.
 (apply(x1,2,sd))[1:5] # checking if the variances are 1. showing first 5 here.
 
 ```
+**beta** is the co
 
 **y** is the response variable following gaussian distribution. a vector of $N$ observations for the response variable should be supplied here. 
 
-**sid** the study labels for each observation in x and y. The sid argument needs to be an $N$ length vector containing integers that are the same for observations in the same study and different for different studies. Therefore each entry will index the study from which the corresponding observation comes. For example, if the data contains 4 studies, then we would expect 4 unique integers in **sid**:
+**study_label** the study labels for each observation in x and y. The study_label argument needs to be an $N$ length vector containing integers that are the same for observations in the same study and different for different studies. Therefore each entry will index the study from which the corresponding observation comes. For example, if the data contains 4 studies, then we would expect 4 unique integers in **study_label**:
 
 ```{r}
-unique(sid)
-length(unique(sid)) # 4 in this case
+unique(study_label)
+length(unique(study_label)) # 4 in this case
 ```
 
 **solution_path_plot** TRUE if outputting solution path plots is desired
@@ -109,7 +110,7 @@ length(unique(sid)) # 4 in this case
 **coefficients** a matrix containing the estimated coefficients for the identified homogeneous or heterogeneous predictors.
 
 ```{r}
-fit=HomUHet(x=x,y=y,sid=sid)
+fit=HomUHet(x=x,y=y,study_label=study_label)
 fit$Homo # the identified homogeneous predictors
 fit$Heter # the identified heterogeneous predictors
 fit$coefficients[1:2,] # the estimated coefficients
@@ -147,7 +148,7 @@ rho=0.5,sigma=2,nlower=50,nupper=300)
 
 **y** is a vector of response variable which is from gaussian distribution.
 
-**sid** is a vector of study labels taking on integers.
+**study_label** is a vector of study labels taking on integers.
 
 
 

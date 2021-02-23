@@ -14,14 +14,13 @@
 #'
 #' This function outputs the names of predictors with homogeneous or heterogeneous predictors across multiple data sets, the estimates of predictors, and solution plots
 #'
-#' @param x the predictor matrix. a matrix of n x J containing observations from all studies for all predictors
-#' @param y the response variable following gaussian distribution. a vector of n observations for the response variable
-#' @param sid a vector of integers indexing the study id for each observation in data
+#' @param data The input dataframe containing observations from all studies where the first column is the study label,
+#' the second column is the response variable and the following columns are the predictors.
 #' @param solution_path_plot TRUE if outputting solution path plots is desired
 #' @return the names of identified predictors and their estimated effects
 #'  \item{Homo}{a character string of names of homogeneous predictors}
 #'  \item{Heter}{a character string of N=names of heterogeneous predictors}
-#'  \item{coefficients}{estimated coefficients of the homogeneous and heterogeneous predictors in K studies}
+#'  \item{coefficients}{a data frame containing estimated coefficients of the homogeneous and heterogeneous predictors in K studies}
 #'
 #' @importFrom dplyr arrange group_by summarise_all
 #' @importFrom graphics abline plot
@@ -32,17 +31,20 @@
 #'
 #'
 #' @export
-HomUHet<-function(x,y,sid,solution_path_plot=FALSE){
+HomUHet<-function(data,solution_path_plot=FALSE){
   ##### sorting data by study
-  data=cbind(y,x)
-  data=as.data.frame(cbind(sid,data))
-  data=dplyr::arrange(data,sid)
-  n=as.data.frame(table(sid))[,2]
+
+
   x=as.matrix(data[,-c(1:2)])
   y=data[,2]
-  sid=data[,1]
+  study_label=data[,1]
+  n=as.data.frame(table(study_label))[,2]
+  data=cbind(y,x)
+  data=as.data.frame(cbind(study_label,data))
+  data=dplyr::arrange(data,study_label)
+
   J=ncol(x)
-  K=length(unique(sid))
+  K=length(unique(study_label))
   lambda=c(0,0)
   lambda[1]=ifelse(sum(n)>J,0.0001,0.01)
   lambda[2]=ifelse(sum(n)>(J*K),0.001,0.05)
@@ -285,9 +287,10 @@ HomUHet<-function(x,y,sid,solution_path_plot=FALSE){
   }
 
 
-  coefficients=rbind(c("predictor",paste("study",seq(1:K),sep=""),"type"),
-                       Homo_estimates,
+  coefficients=rbind(Homo_estimates,
                        Heter_estimates)
+  coefficients=as.data.frame(coefficients)
+  names(coefficients)=c("predictor",paste("study",seq(1:K),sep=""),"type")
 
 if (solution_path_plot==TRUE){
 
@@ -309,125 +312,55 @@ if (solution_path_plot==TRUE){
 #'
 #' this function simulate data
 #'
-#' @param Pred_type the predictor type; choose between continuous or SNP
-#' @param J the number of predictors. J should be at least 300.
+#' @param Pred_type the predictor type; choose between Gaussian or SNP
+#' @param J the number of predictors.
 #' @param K the number of studies.
-#' @param level the level of heterogeneity. "l" stands for low, "m" stands for medium, and "h" stands for high.
+#' @param beta the K x J coefficient matrix
+#' @param level the level of heterogeneity. ignored if "beta" is supplied. "l" stands for low, "m" stands for medium, and "h" stands for high.
 #' @param rho a number between 0 and 1. controlling the degree of correlation between predictors
 #' @param sigma a positive number. controlling the added noise to the simulated response variable
+#' @param allele_freq a J-length vector containing the allele frequencies for the J SNPs. ignored if Pred_type="Gaussian"
 #' @param nlower the lower bound of the K sample sizes
 #' @param nupper the upper bound of the K sample sizes
 #' @importFrom mvtnorm rmvnorm
 #' @return the simulated data
-#' \item{x}{an n x J matrix containing simulated predictors}
-#' \item{y}{an n-length vector of simulated response variable}
-#' \item{sid}{an n-length vector of integers containing the study id for each observation in data}
 #' @export
-HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m","h"),rho=0.5,sigma=2,nlower=50,nupper=300){
-  v=c(1,rep(NA,(J-1)))
+HomUHet.sim<-function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL,
+                      rho=0.5,sigma=2, level=c("l","m","e"),
+                      nlower=50,nupper=300, allele_freq){
 
-  for (i in 2:J){
-    v[i]=rho^(i-1)
-  }
 
-  Sigma=toeplitz(v)
-  t=0
-  x=rep(0,J)
-  y=0
-  sid=0
-  b=rep(0,40)
-  n=0
+  if (is.null(beta) && (K %in% c(4, 10)) && J > 270) {
 
-  if (K==4){
-    if (level=="l"){
-      fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-      b.matrix=matrix(0,ncol=30,nrow=K)
+    v=c(1,rep(NA,(J-1)))
 
-      for (j in 1:30){
-        if (j<11){
-          b.matrix[,j]=sample(c(runif(2,1,1.5),runif(2,-1.5,-1)),K)
-        }
+    for (i in 2:J){
+      v[i]=rho^(i-1)
+    }
 
-        else {if (j<21){
-          b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,2,2.5),runif(2,3,3.5)),K)
-        }
-          else {
-            b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-2.5,-2),runif(2,-3.5,-3)),K)
-          }
-        }
-      }
-      modified.b.matrix<-matrix(0,ncol=60,nrow=K)
+    Sigma=toeplitz(v)
+    t=0
+    x=rep(0,J)
+    y=0
+    study_label=0
+    b=rep(0,40)
+    n=0
 
-      for (j in 1:30){
-
-        modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-      }
-
-    } else if (level=="m"){
-      fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-      b.matrix=matrix(0,ncol=30,nrow=K)
-
-      for (j in 1:30){
-        if (j<11){
-          b.matrix[,j]=sample(c(runif(2,2,2.5),runif(2,-2.5,-2)),K)
-        }
-
-        else {if (j<21){
-          b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,3,3.5),runif(2,5,5.5)),K)
-        }
-          else {
-            b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-3.5,-3),runif(2,-5.5,-5)),K)
-          }
-        }
-      }
-
-      modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-      for (j in 1:30){
-
-        modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-      }
-
-    } else {
-      fixed.b=c(runif(5,3,6),runif(5,-6,-3))
-      b.matrix=matrix(0,ncol=30,nrow=K)
-
-      for (j in 1:30){
-        if (j<11){
-          b.matrix[,j]=sample(c(runif(2,5,6.5),runif(2,-6.5,-5)),K)
-        }
-
-        else {if (j<21){
-          b.matrix[,j]=sample(c(runif(1,1,2),runif(1,5,6),runif(2,9,10)),K)
-        }
-          else {
-            b.matrix[,j]=sample(c(runif(1,-2,-1),runif(1,-6,-5),runif(2,-10,-9)),K)
-          }
-        }
-      }
-      modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-      for (j in 1:30){
-
-        modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-      }
-
-    }} else {
-
+    if (K==4){
       if (level=="l"){
         fixed.b=c(runif(5,1,3),runif(5,-3,-1))
         b.matrix=matrix(0,ncol=30,nrow=K)
 
         for (j in 1:30){
           if (j<11){
-            b.matrix[,j]=sample(c(runif(5,1,1.5),runif(5,-1.5,-1)),K)
+            b.matrix[,j]=sample(c(runif(2,1,1.5),runif(2,-1.5,-1)),K)
           }
 
           else {if (j<21){
-            b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,2,2.5),runif(4,3,3.5)),K)
+            b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,2,2.5),runif(2,3,3.5)),K)
           }
             else {
-              b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-2.5,-2),runif(4,-3.5,-3)),K)
+              b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-2.5,-2),runif(2,-3.5,-3)),K)
             }
           }
         }
@@ -437,20 +370,21 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
 
           modified.b.matrix[,(j*2-1)]=b.matrix[,j]
         }
+
       } else if (level=="m"){
         fixed.b=c(runif(5,1,3),runif(5,-3,-1))
         b.matrix=matrix(0,ncol=30,nrow=K)
 
         for (j in 1:30){
           if (j<11){
-            b.matrix[,j]=sample(c(runif(5,2,2.5),runif(5,-2.5,-2)),K)
+            b.matrix[,j]=sample(c(runif(2,2,2.5),runif(2,-2.5,-2)),K)
           }
 
           else {if (j<21){
-            b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,3,3.5),runif(4,5,5.5)),K)
+            b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,3,3.5),runif(2,5,5.5)),K)
           }
             else {
-              b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-3.5,-3),runif(4,-5.5,-5)),K)
+              b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-3.5,-3),runif(2,-5.5,-5)),K)
             }
           }
         }
@@ -461,20 +395,21 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
 
           modified.b.matrix[,(j*2-1)]=b.matrix[,j]
         }
+
       } else {
-        fixed.b=c(runif(5,1,6),runif(5,-6,-1))
+        fixed.b=c(runif(5,3,6),runif(5,-6,-3))
         b.matrix=matrix(0,ncol=30,nrow=K)
 
         for (j in 1:30){
           if (j<11){
-            b.matrix[,j]=sample(c(runif(5,5,6.5),runif(5,-6.5,-5)),K)
+            b.matrix[,j]=sample(c(runif(2,5,6.5),runif(2,-6.5,-5)),K)
           }
 
           else {if (j<21){
-            b.matrix[,j]=sample(c(runif(3,1,2),runif(3,5,6),runif(4,9,10)),K)
+            b.matrix[,j]=sample(c(runif(1,1,2),runif(1,5,6),runif(2,9,10)),K)
           }
             else {
-              b.matrix[,j]=sample(c(runif(3,-2,-1),runif(3,-6,-5),runif(4,-10,-9)),K)
+              b.matrix[,j]=sample(c(runif(1,-2,-1),runif(1,-6,-5),runif(2,-10,-9)),K)
             }
           }
         }
@@ -484,72 +419,316 @@ HomUHet.sim<-function(Pred_type=c("Con","SNP"),J=1400,K=c(4,10),level=c("l","m",
 
           modified.b.matrix[,(j*2-1)]=b.matrix[,j]
         }
+
+      }} else {
+
+        if (level=="l"){
+          fixed.b=c(runif(5,1,3),runif(5,-3,-1))
+          b.matrix=matrix(0,ncol=30,nrow=K)
+
+          for (j in 1:30){
+            if (j<11){
+              b.matrix[,j]=sample(c(runif(5,1,1.5),runif(5,-1.5,-1)),K)
+            }
+
+            else {if (j<21){
+              b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,2,2.5),runif(4,3,3.5)),K)
+            }
+              else {
+                b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-2.5,-2),runif(4,-3.5,-3)),K)
+              }
+            }
+          }
+          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
+
+          for (j in 1:30){
+
+            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
+          }
+        } else if (level=="m"){
+          fixed.b=c(runif(5,1,3),runif(5,-3,-1))
+          b.matrix=matrix(0,ncol=30,nrow=K)
+
+          for (j in 1:30){
+            if (j<11){
+              b.matrix[,j]=sample(c(runif(5,2,2.5),runif(5,-2.5,-2)),K)
+            }
+
+            else {if (j<21){
+              b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,3,3.5),runif(4,5,5.5)),K)
+            }
+              else {
+                b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-3.5,-3),runif(4,-5.5,-5)),K)
+              }
+            }
+          }
+
+          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
+
+          for (j in 1:30){
+
+            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
+          }
+        } else {
+          fixed.b=c(runif(5,1,6),runif(5,-6,-1))
+          b.matrix=matrix(0,ncol=30,nrow=K)
+
+          for (j in 1:30){
+            if (j<11){
+              b.matrix[,j]=sample(c(runif(5,5,6.5),runif(5,-6.5,-5)),K)
+            }
+
+            else {if (j<21){
+              b.matrix[,j]=sample(c(runif(3,1,2),runif(3,5,6),runif(4,9,10)),K)
+            }
+              else {
+                b.matrix[,j]=sample(c(runif(3,-2,-1),runif(3,-6,-5),runif(4,-10,-9)),K)
+              }
+            }
+          }
+          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
+
+          for (j in 1:30){
+
+            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
+          }
+        }
+
       }
 
-    }
-
-  if (Pred_type=="Con"){
-    while (t<K){
-      n.temp=sample(seq(nlower,nupper),1)
-      n=c(n,n.temp)
-      sid.temp=rep(t+1,n.temp)
-      sid=c(sid,sid.temp)
-      temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-                     method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-      temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])
-      temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
-      temp.y=temp.y
-      x=rbind(x,scale(temp.x))
-      y=c(y,temp.y)
-
-      t=t+1
-    }} else {
-      allele.freq=runif(J,0.05,0.5)
+    if (Pred_type=="Gaussian"){
       while (t<K){
         n.temp=sample(seq(nlower,nupper),1)
         n=c(n,n.temp)
-        sid.temp=rep(t+1,n.temp)
-        sid=c(sid,sid.temp)
-        divider=rep(0,J)
-        temp.x1=matrix(0,ncol=J,nrow=n.temp)
-        temp.x2=matrix(0,ncol=J,nrow=n.temp)
-
-
-        temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-        method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-        temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-        method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-
-        for (j in 1:J){
-
-          temp.x1[,j]=ifelse(temp.z1[,j]<=qnorm(allele.freq[j]),1,0)
-          temp.x2[,j]=ifelse(temp.z2[,j]<=qnorm(allele.freq[j]),1,0)
-          divider[j]=sqrt(allele.freq[j]*(1-allele.freq[j]))
-
-
-
-        }
-
-        temp.x=temp.x1+temp.x2
-        temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])/divider[1:270]
+        study_label.temp=rep(t+1,n.temp)
+        study_label=c(study_label,study_label.temp)
+        temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+        temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])
         temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
-        temp.x=scale(temp.x)
-        temp.x[is.na(temp.x)]<-0
-        x=rbind(x,temp.x)
-
+        temp.y=temp.y
+        x=rbind(x,scale(temp.x))
         y=c(y,temp.y)
 
         t=t+1
-      }
-    }
-  x=x[-1,]
-  y=y[-1]
-  n=n[-1]
-  sid=sid[-1]
+      }} else {
+        allele.freq=runif(J,0.05,0.5)
+        while (t<K){
+          n.temp=sample(seq(nlower,nupper),1)
+          n=c(n,n.temp)
+          study_label.temp=rep(t+1,n.temp)
+          study_label=c(study_label,study_label.temp)
+          divider=rep(0,J)
+          temp.x1=matrix(0,ncol=J,nrow=n.temp)
+          temp.x2=matrix(0,ncol=J,nrow=n.temp)
 
-  list(x=x,y=y,sid=sid)
+
+          temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                   method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+          temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                   method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+
+          for (j in 1:J){
+
+            temp.x1[,j]=ifelse(temp.z1[,j]<=qnorm(allele.freq[j]),1,0)
+            temp.x2[,j]=ifelse(temp.z2[,j]<=qnorm(allele.freq[j]),1,0)
+            divider[j]=sqrt(allele.freq[j]*(1-allele.freq[j]))
+
+
+
+          }
+
+          temp.x=temp.x1+temp.x2
+          temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])/divider[1:270]
+          temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
+          temp.x=scale(temp.x)
+          temp.x[is.na(temp.x)]<-0
+          x=rbind(x,temp.x)
+
+          y=c(y,temp.y)
+
+          t=t+1
+        }
+      }
+    x=x[-1,]
+    y=y[-1]
+    n=n[-1]
+    study_label=study_label[-1]
+
+
+    }  else if (is.null(beta)){
+      stop("beta is missing")
+    } else {
+
+      if(K != nrow(beta) ){
+        stop ("K does not equal to the number of rows of beta")
+      } else if (J != ncol(beta)) {
+        stop ("J does not equal to the number of columns of beta")
+      } else if (J != length(allele_freq)) {
+        stop ("J needs to match the length of allele_freq")
+      }
+
+      K=nrow(beta)
+      J=ncol(beta)
+      v=c(1,rep(NA,(J-1)))
+
+      for (i in 2:J){
+        v[i]=rho^(i-1)
+      }
+
+      Sigma=toeplitz(v)
+      t=0
+      x=rep(0,J)
+      y=0
+      study_label=0
+      b=rep(0,40)
+      n=0
+
+
+
+      if (Pred_type=="Gaussian"){
+        while (t<K){
+          n.temp=sample(seq(nlower,nupper),1)
+          n=c(n,n.temp)
+          study_label.temp=rep(t+1,n.temp)
+          study_label=c(study_label,study_label.temp)
+          temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                  method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+          temp.rb=beta[(t+1),]
+          temp.y=rnorm(1,0,5)+temp.x%*%temp.rb+rnorm(n.temp,0,sigma)
+          temp.y=temp.y
+          x=rbind(x,scale(temp.x))
+          y=c(y,temp.y)
+
+          t=t+1
+        }} else {
+          allele.freq=allele_freq
+          while (t<K){
+            n.temp=sample(seq(nlower,nupper),1)
+            n=c(n,n.temp)
+            study_label.temp=rep(t+1,n.temp)
+            study_label=c(study_label,study_label.temp)
+            divider=rep(0,J)
+            temp.x1=matrix(0,ncol=J,nrow=n.temp)
+            temp.x2=matrix(0,ncol=J,nrow=n.temp)
+
+
+            temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                     method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+            temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+                                     method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+
+            for (j in 1:J){
+
+              temp.x1[,j]=ifelse(temp.z1[,j]<=qnorm(allele.freq[j]),1,0)
+              temp.x2[,j]=ifelse(temp.z2[,j]<=qnorm(allele.freq[j]),1,0)
+              divider[j]=sqrt(allele.freq[j]*(1-allele.freq[j]))
+
+
+
+            }
+
+            temp.x=temp.x1+temp.x2
+            temp.rb=beta[(t+1),]/divider
+            temp.y=rnorm(1,0,5)+temp.x%*%temp.rb+rnorm(n.temp,0,sigma)
+            temp.x=scale(temp.x)
+            temp.x[is.na(temp.x)]<-0
+            x=rbind(x,temp.x)
+
+            y=c(y,temp.y)
+
+            t=t+1
+          }
+        }
+      x=x[-1,]
+      y=y[-1]
+      n=n[-1]
+      study_label=study_label[-1]
+
+
+    }
+
+ data=as.data.frame(cbind(study_label, y, x))
+
+ pred_names=paste(rep("Pred_V",ncol(x)), seq(1:ncol(x)),sep="" )
+
+ names(data)[-(1:2)]=pred_names
+
+return(data)
 }
 
+#' simulates homogeneous and heterogeneous coefficients of predictors
+#'
+#' this function outputs matrix of coefficients of all predictors (homogeneous or heterogeneous, or 0 in the case when the corresponding predictor has no effect)
+#' and organize them as desired by the user
+#'
+#' @param J The total number of predictors including the predictors with homogeneous and heterogeneous effects and the predictors without effects
+#' @param K The number of studies
+#' @param homo_coef the 2 x p1 input matrix to generate homogeneous coefficients of p1 number of predictors.
+#' The first row should be integers indicating which columns the user wants the homogeneous coefficients to be.
+#' The second row should be the homogeneous coefficients themselves
+#' @param heter_distr indicates which distribution the user wishes to use to generate the heterogeneous coefficients
+#' @param heter_coef_param the 3 x p2 input matrix to generate heterogeneous coefficients of p2 number of predictors.
+#' The first row should be integers indicating which columns the user wants the heterogeneous coefficients to be.
+#' If heter_distr="Gaussian", the second and third row for each column are, resepctively, the mean and standard deviation of the gaussian distribution used as heter_distr.
+#' If heter_distr="Uniform", the second and third row for each column are, respectively, the lower boundary and upper boundary of the uniform distribution used as heter_distr.
+#' @return the simulated coefficient matrix and miscellenance information about it
+#'  \item{beta}{the K x J coefficient matrix}
+#'  \item{J}{the number of predictors including both predictors which have effects and which do not}
+#'  \item{K}{the number of studies}
+#'  \item{homo_index}{a vector containing the column numbers of homogeneous coefficients in the coefficient matrix}
+#'  \item{heter_index}{a vector containing the column numbers of homogeneous coefficients in the coefficient matrix}
+#' @export
+HomUHet.sim.beta<-function(J, K, homo_coef, heter_distr=c("Gaussian","Uniform"),
+                           heter_coef_param=rbind(c(1,2,3),c(2,1,2), c(2,2,3))){
+
+  if (nrow(homo_coef) != 2){
+    stop("Incorrect dimension of homo_coef ")
+  } else if (nrow (heter_coef_param) != 3) {
+    stop("Incorrect dimension of heter_coef_param ")
+  }
+
+  if (length(intersect(homo_coef[1,], heter_coef_param[1,])) > 0) {
+    stop("Incorrect column indexes. The column indexes in homo_coef and heter_coef_param should not be overlapping")
+  }
+
+  if ( !all(union(homo_coef[1,], heter_coef_param[1,]) %in% seq(1:J))){
+    stop ("incorrect column index from homo_coef or heter_coef_param")
+  }
+
+  beta<-matrix(0, ncol = J, nrow = K )
+  homo = rep(homo_coef[2,], K)
+  homo = matrix(homo, ncol=K)
+  homo = t(homo)
+
+  if (heter_distr=="Gaussian"){
+
+    heter_gen<-function(x){
+      return(rnorm(K, mean=x[2], sd=x[3]))
+    }
 
 
+  } else {
+
+    heter_gen<-function(x){
+    if (x[2]==x[3]){
+      stop ("The two parameters of the uniform distribution should be different for heterogeneous effects of a predictor")
+    }
+      return(runif(K, min=x[2], max=x[3]))
+    }
+  }
+
+  heter=apply(heter_coef_param, 2, heter_gen)
+
+  beta[,homo_coef[1,]]=homo
+
+  beta[,heter_coef_param[1,]]=heter
+
+  homo_index=homo_coef[1,]
+
+  heter_index=heter_coef_param[1,]
+
+  list(J=J, K=K, beta=beta,
+       homo_index=homo_index, heter_index=heter_index)
+}
 

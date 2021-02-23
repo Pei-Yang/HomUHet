@@ -5,38 +5,41 @@
 \title{simulate multiple data sets with both homogeneous and heterogeneous effects from the predictors}
 \usage{
 HomUHet.sim(
-  Pred_type = c("Con", "SNP"),
-  J = 1400,
-  K = c(4, 10),
-  level = c("l", "m", "h"),
+  Pred_type = c("Gaussian", "SNP"),
+  J,
+  K,
+  beta = NULL,
   rho = 0.5,
   sigma = 2,
+  level = c("l", "m", "e"),
   nlower = 50,
-  nupper = 300
+  nupper = 300,
+  allele_freq
 )
 }
 \arguments{
-\item{Pred_type}{the predictor type; choose between continuous or SNP}
+\item{Pred_type}{the predictor type; choose between Gaussian or SNP}
 
-\item{J}{the number of predictors. J should be at least 300.}
+\item{J}{the number of predictors.}
 
 \item{K}{the number of studies.}
 
-\item{level}{the level of heterogeneity. "l" stands for low, "m" stands for medium, and "h" stands for high.}
+\item{beta}{the K x J coefficient matrix}
 
 \item{rho}{a number between 0 and 1. controlling the degree of correlation between predictors}
 
 \item{sigma}{a positive number. controlling the added noise to the simulated response variable}
 
+\item{level}{the level of heterogeneity. ignored if "beta" is supplied. "l" stands for low, "m" stands for medium, and "h" stands for high.}
+
 \item{nlower}{the lower bound of the K sample sizes}
 
 \item{nupper}{the upper bound of the K sample sizes}
+
+\item{allele_freq}{a J-length vector containing the allele frequencies for the J SNPs. ignored if Pred_type="Gaussian"}
 }
 \value{
 the simulated data
-\item{x}{an n x J matrix containing simulated predictors}
-\item{y}{an n-length vector of simulated response variable}
-\item{sid}{an n-length vector of integers containing the study id for each observation in data}
 }
 \description{
 this function simulate data
