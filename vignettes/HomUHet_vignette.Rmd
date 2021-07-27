@@ -1,6 +1,8 @@
 ---
 title: "HomUHet Vignette"
-output: rmarkdown::pdf_document
+output: 
+  pdf_document: 
+    fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{HomUHet Vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -8,10 +10,16 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+knitr::opts_chunk$set(cache=TRUE, message=FALSE, warning=FALSE,
+error=FALSE, fig.cap = " ")
+```
+
+```{r, include=FALSE}
+library(captioner)
+
+figure_nums <- captioner(prefix = "Figure")
+figure_nums(name = "solplots", caption = "solution path plots")
+figure_cap <- figure_nums("solplots")
 ```
 
 ```{r, include=FALSE}
@@ -47,15 +55,16 @@ options(tinytex.verbose = TRUE)
 
 The presence of biological homogeneity and heterogeneity is a phenomenon that many researchers seek to understand. Often times, researchers want to identify biomarkers having heterogeneous or homogeneous effects on an outcome. HomUHet defines a biomarker as having a homogeneous effect if its effects are an non-zero constant across studies, and heterogeneous if the effects are not all equal. However, identifying the biological heterogeneity and homogeneity in the effects of predictors across data sets while maintaining computational efficiency and accounting for dependency structure within correlated data is challenging and urgently needed. 
 
-HomUHet is developed to address the problem by using individual level data to fit penalized linear regression models. Since HomUHet is using a two step procedure, it requires special standardization where each predictor needs to be standardized within each study prior to applying HomUHet and future work will be done for cases (e.g. the study-specific sample variances of a predictor are not assumed to be constant across studies) where this standardization may not apply. 
+HomUHet is developed to address the problem by using individual level data to fit penalized linear regression models in two steps. In the first step, HomUHet estimates and removes the overall effects of predictors (only homogeneous and some of the heterogeneous predictors are expected to have overall effect) by using data concatenated from all studies. After step 1, homogeneous predictors will not be associated with the response variable any more, but the heterogeneous ones are still associated due to deviance between study specific effect and overall effect. In step 2, by using a group LASSO method, HomUHet estimates the remaining effects of predictors, keeping predictors with remaining heterogeneous effects in the model while dropping predictors without remaining effects (both homogeneous and unassociated predictors are expected to be dropped in step 2, for they should not have remaining effects). By combining the estimates from the two steps, HomUHet estimate effects of predictors in all studies and separate the homogeneous, heterogeneous and unassociated predictors apart. Since HomUHet is using a two step procedure, it requires special standardization where each predictor needs to be standardized within each study prior to applying HomUHet and future work will be done for cases (e.g. the study-specific sample variances of a predictor are not assumed to be constant across studies) where this standardization may not apply. 
 
 In this package, we provide the following functions
 
 * HomUHet fits penalized linear regression models in two steps and performs variable selection, which provides the names of identified predictors with homogeneous or heterogeneous effects, as well as their estimated coefficients.
 
+* HomUHet.sim.beta simulate the coefficient matrix for predictors that can be used in HomUHet.sim.
+
 * HomUHet.sim simulate multiple data sets with correlated predictors, homogeneous and heterogeneous effects of predictors and generate the response variable.
 
-* HomUHet.sim.beta simulate the coefficient matrix for all predictors that can be used in HomUHet.sim.
 
 The usage of the package will be illustrated in the following sections.
 
@@ -66,13 +75,9 @@ HomUHet can be used to identify and separates predictors with homogeneous or het
 
 ## 2.1 Input data for HomUHet
 
-HomUHet <- function (data, solution_path_plot = FALSE)
+HomUHet (data, solution_path_plot = FALSE)
 
-
-<br>
-**Arguments**
-
-**data** is the data frame containing containing observations concatenated from all studies where the first column is the study label containing integers that indicate the study to which the observation belongs, the second column is the response variable and the following columns are the predictors including both genetic and non-genetic variables. All studies should use the same set of predictors. The predictors are also expected to be standardized such that the sample mean is 0 and sample variance is 1 for each predictor within each study. The response variable is limited to be a continuous variable. Below shows an example of the input data frame.
+**data** is the data frame where each row is information from a subject in one of the studies, containing observations concatenated from all studies where the first column is the study label containing integers that indicate the study to which the observation belongs, the second column is the response variable and the following columns are the predictors including both genetic and non-genetic variables. All studies should use the same set of predictors. The predictors are also expected to be standardized such that the sample mean is 0 and sample variance is 1 for each predictor within each study. The response variable is limited to be a continuous variable. Below shows an example of the input data frame.
 
 ```{r}
 library(HomUHet)
@@ -87,85 +92,171 @@ unique(HomUHet_data$study_label)
 
 x1=HomUHet_data[HomUHet_data$study_label==1,] 
 # extracting observations from study 1
-(colMeans(x1[,-(1:2)]))[1:5] # checking if the means are 0. showing the first 5 predictors here.
+(colMeans(x1[,-(1:2)]))[1:5] 
+# checking if the means are 0 for each predictor in study 1. showing the first 5 predictors here.
 (apply(x1[,-(1:2)],2,sd))[1:5] # checking if the variances are 1. showing first 5 here.
 
 ```
 In this sample data, the first column contains the study labels. For example, study_label=1 indicates that row 1 is an observation from study 1. The second column is the response variable, y. Starting from the third column are the predictors, which are standardized. 
 
-**solution_path_plot** TRUE if outputting solution path plots is desired. 
+**solution_path_plot** TRUE if outputting solution path plots for both step 1 and step 2 is desired. Figures below shows examples of the solution path plots.
 
+```{r sol plots, fig.cap= figure_cap}
+set.seed(100)
+fit=HomUHet(data=HomUHet_data, solution_path_plot = TRUE)
+
+```
+
+`r figure_nums("solplots")`
 
 ## 2.2 Output values from HomUHet
 
-<br>
-**Values** the outputs are two solution path plots (if checked TRUE in solution_path_plot) and a list containing the following elements
+The outputs are two solution path plots (if checked TRUE in solution_path_plot) and a list containing the following elements:
 
-**Homo** is a vector containing the names (if provided in the input data) or column numbers of identified homogeneous predictors.
+**Homo** is a vector containing the names (if provided in the input data) of identified homogeneous predictors. If names are not provided, **Homo** will display the column numbers of them, shown as "V_n", where n is the column number (excluding the study label and response variable). The estimates are constant across studies.
 
-**Heter** is a vector containing the names (if provided in the input data) or column numbers of identified heterogeneous predictors.
+**Heter** is a vector containing the names (if provided in the input data) of identified heterogenous predictors. If names are not provided, **Heter** will display the column numbers of them, shown as "V_n", where n is the column number (excluding the study label and response variable).
 
-**coefficients** a matrix containing the estimated coefficients for the identified homogeneous or heterogeneous predictors. The estimates of a homogeneous predictor are identical across studies
+**coefficients** is a matrix containing the estimated coefficients for the identified homogeneous or heterogeneous predictors. The estimates of a homogeneous predictor are identical across studies.
+
+In the following, we are going to show an example by applying HomUHet() to HomUHet_data. HomUHet_data contains 500 predictors that are correlated, out of which 10 have homogeneous effects and 30 have heterogeneous effects. In the result below, HomUHet correctly identified 9 out of 10 homogeneous effects while including only one falsely discovered unassociated predictor. HomUHet also correctly identified all 30 heterogeneous predictors while falsely identified 13 out of 460 unassociated predictors as heterogeneous.
 
 ```{r}
-fit=HomUHet(data=HomUHet_data, solution_path_plot = TRUE)
-fit$Homo # the identified homogeneous predictors (names are not provided so these are column names)
-fit$Heter # the identified heterogeneous predictors
+set.seed(100)
+fit=HomUHet(data=HomUHet_data, solution_path_plot = FALSE)
+fit$Homo 
+# the identified homogeneous predictors. if names are not provided, the predictor names will be displayed as "V_n" where n is the column number of predictors (excluding the study label and response variable).
+(fit$Heter)[1:10] 
+# partial list of the identified heterogeneous predictors
 (fit$coefficients[(fit$coefficients)$type=="Homogeneous",])[1:5,] 
-# some of the estimated homogeneous coefficients 
-(fit$coefficients[(fit$coefficients)$type=="Heterogeneous",])[1:5,] 
-# some of the estimated coefficients
+# partial display of the estimated homogeneous coefficients 
+(fit$coefficients[(fit$coefficients)$type=="Heterogeneous",])[1:5,]
+# partial display of the estimated coefficients
 
 ```
 
-The vertical black lines in the two solution path plots mark the values of lambda used by HomUHet in two steps to generate the outputted values. 
+The vertical black lines in the two solution path plots mark the values of lambda used by HomUHet in each of the two steps to generate the outputted values. 
 
-# 3.1 Simulating multiple data sets 
 
-HomUHet.sim <- function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL, rho=0.5, sigma, level=c("l", "m", "e"), nlower, nupper, allele_freq)
+# 3 Simulating data
 
-<br>
-**Arguments**
+We provide two functions for simulating data sets. One of them simulates the coefficients of predictors and the other simulates the data sets when the coefficients of predictors are supplied. By having both functions, the users have the option of using their own set of coefficients as well as having a convenient way to simulate the coefficients from scratch.
 
-**Pred_type** indicates which type of predictor the user wishes to simulate.
 
-**J** is the number of predictors.
+
+## 3.1 Simulating the data sets 
+
+HomUHet.sim simulates continuous response variable generated as a linear combination of predictors including common covariates such as age and sex, as well as continuous genetic variants and SNPs. The users can choose to supply their own coefficient matrix used to generate the response variable, otherwise the coefficients will be generated by calling HomUHet.sim.beta. In this section, we demonstrate the usage of HomUHet.sim without directly supplying the coefficient matrix.
+
+HomUHet.sim (age=TRUE, sex=TRUE, K, n_cont, n_SNP,
+                      rho=0.5,sigma=2,
+                      nlower=50, nupper=300, beta=NULL)
+
+
+**age** TRUE if covariate age should be included. The ages will be simulated from a normal distribution with mean 40 and standard deviation 5. The coefficient value for age is set to be 1.
+
+
+**sex** TRUE if covariate sex should be included. sex will be simulated from Bernoulli distribution with the proportion randomly chosen between 0 and 1. The coefficient value for sex is set to be 1.
 
 **K** is the number of studies.
 
-**beta** the coefficient matrix of dimension $K \times J$ containing coefficients for the homogeneous, heterogeneous and unassociated predictors.
+**n_cont** is the number of continuous predictors to be simulated. Enter 0 if there will not be continuous predictors.
 
-**level** represents the level of heterogeneity in the effects of predictors. "l" stands for low, "m" stands for medium, and "h" stands for high. used in a default example and ignored if beta is supplied.
+**n_SNP** is the number of SNPs to be simulated. Enter 0 if there will not be SNP predictors. The allele frequencies will be simulated from Uniform (0.05, 0.5).
 
-**rho** should be a number between 0 and 1. This controls the degree of correlation between predictors.
+**rho** is a number between 0 and 1. This controls the degree of correlation between predictors.
 
-**sigma** should be a positive number. This controls the added noise to the simulated response variable.
+**sigma** is a positive number. This controls the added noise to the simulated response variable.
 
-**nlower** sets the lower bound of the K sample sizes. The sample size for each study is picked from a uniform distribution with lower bound equal to nlower and upper bound equal to nupper
+HomUHet.sim gives the option of using unequal sample sizes across studies, so the sample size of each study will be drawn from Uniform (nlower, nupper), where
 
-**nupper** sets the upper bound of the K sample sizes
+**nlower** sets the lower bound of the sample sizes. 
 
-**allele_freq** a J-length vector containing the allele frequencies of the $J$ predictors. required only if Pred_type is $"SNP"$.
+**nupper** sets the upper bound of the sample sizes.
 
-the following shows an example where 3 studies and 12 SNP predictors are to be generated. Among the 12 predictors, the first predictor has homogeneous effects (all equal to 2) and the $11^{th}$ predictor has heterogeneous effects (2, 4, 6, respectively in the 3 studies).
+**beta** if the users wish to supply the coefficients on their own, enter a coefficient matrix where the columns containing the K coefficients of each predictor, for all genetic and non-genetic predictors. For example, to simulate a data set with age, sex, and 6 genetic variants for K studies, beta should be a $K \times 8$ matrix. 
+
+
+The following shows an example where 4 studies and 20 predictors including age, sex, 5 continuous predictors and 13 SNPs are to be generated. Among the genetic variants, 3 of them have homogeneous coefficients and 5 have heterogeneous coefficients. The sample sizes of k studies range between 50 and 120
+
 
 ```{r}
-beta=cbind(c(2,2,2), matrix(0,ncol=10,nrow=3),c(2,4,6))
-# constructing a beta matrix
-K=nrow(beta) # the number of studies
-J=ncol(beta) # the number of predictors
-allele_freq=runif(J,0.05,0.5) # allele frequency 
-mydata=HomUHet.sim(Pred_type="SNP", J=J, K=K, beta=beta,
-                      rho=0.5,sigma=2,
-                      nlower=50,nupper=200, allele_freq=allele_freq)
+mydata=HomUHet.sim (age=TRUE, sex=TRUE, K=4, n_cont=5, n_SNP=13, n_homo=3, n_heter=5, rho=0.5,sigma=2,
+                      nlower=50,nupper=120)
 
-mydata[1:2,1:5] # showing the first few lines and columns of the output data.
+(mydata$data)[1:2,1:5] # a partial display of the simulated data
 
 ```
 
-<br>
-**value ** The output is a data frame containing, in that order, the simulated study label, response variable and predictors.
 
+The output is a list of the following items:
+
+**data**  is a data frame containing, in that order, the simulated study label, response variable and predictors. **study_label** is the variable indicating to which study each row of observation belongs, **y** is the continuous response variable and the rest of the variables are the predictors arranged in the order of age, sex, continuous predictors, and SNPs.
+
+**beta** is the simulated (or supplied) coefficient matrix.
+
+**homo_index** is the column numbers of simulated homogeneous coefficients (or supplied coefficients) in **data**.
+
+**heter_index** is the column numbers of simulated heterogeneous coefficients (or supplied coefficients) in **data**.
+
+## 3.2 Simulating the coefficients
+
+This function simulates homogeneous and heterogeneous coefficients of prospective predictors, and outputs them in a matrix including the coefficients of predictors without an effect (in which case, the coefficients are zero)
+
+HomUHet.sim.beta (J, K, n_homo, n_heter, level=c("l","m","h"))
+                          
+The function allows the user to simulate the coefficients of **J** prospective predictors for **K** studies. The users can choose to simulate **n_homo** number of homogeneous coefficients and **n_heter** number of heterogeneous coefficients. The input values for HomUHet.sim.beta() are the following:
+
+  **J** is the total number of predictors including the predictors with homogeneous and heterogeneous effects and the predictors without effects.
+  
+  **K** is the number of studies.
+  
+  **n_homo** indicates the number of homogeneous coefficients
+  
+  **n_heter** indicates the number of heterogeneous coefficients
+  
+  **level** "l", "m", and "h" represent increasing level of heterogeneity in the coefficients, where "l" stands for low, "m" stands for medium and "h" stands for high, each corresponding to a different sets of parameters used to simulate the coefficients. 
+ 
+In the following, we show an example of simulating coefficients for J=20 prospective predictors. Out of which, 3 are homogeneous, 4 are heterogeneous and the rest of them are zero, for k=4 studies.
+
+```{r}
+# simulating coefficients
+coef_mat = HomUHet.sim.beta(J=20, K=4, n_homo=3, n_heter=4, level="l")
+
+# below is a partial display of the matrix of coefficients
+# each column contains the 4 coefficients of one predictor 
+# across 4 studies.
+
+coef_mat$beta[,1:6]
+
+# we can also extract the heterogeneous coefficients by entering the following:
+
+(coef_mat$beta)[,coef_mat$heter_index]
+
+# where heter_index tells us the column numbers of the heterogeneous coefficients
+
+coef_mat$heter_index
+
+# and homo_index tells us the column numbers of the heterogeneous coefficients
+
+coef_mat$homo_index
+                           
+```
+ 
+ 
+The function outputs the simulated coefficient matrix and miscellenance information about it, including:
+ 
+**beta**, the K x J coefficient matrix containing homogeneous, heterogeneous coefficients, as well as coefficients of prospective unassociated predictors (which are zeros).
+ 
+**J**, the number of predictors including both predictors which have effects and which do not.
+
+**K**, the number of studies.
+
+**homo_index**, a vector containing the column numbers of homogeneous coefficients in the coefficient matrix. 
+
+**heter_index**, a vector containing the column numbers of homogeneous coefficients in the coefficient matrix.
+ 
+ 
 
 
 

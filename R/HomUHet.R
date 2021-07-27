@@ -23,7 +23,10 @@
 HomUHet<-function(data,solution_path_plot=FALSE){
   ##### sorting data by study
 
-
+  if (is.null(names(data))){
+    pred_names=past("V",c(3:ncol(data)), sep="")
+  }
+  pred_names=names(data)[-c(1:2)]
   x=as.matrix(data[,-c(1:2)])
   y=data[,2]
   study_label=data[,1]
@@ -247,14 +250,16 @@ HomUHet<-function(data,solution_path_plot=FALSE){
   #### assessing performance
 
   Homo=intersect(non.zero.beta,which(ebic.selection[,2]==0))
+  Homo_names=pred_names[Homo]
   Heter=which(ebic.selection[,2]!=0)
+  Heter_names=pred_names[Heter]
   noise=intersect(zero.beta,which(ebic.selection[,2]==0))
 
   #### estimates
   if (length(Homo)>0){
     Homo_estimates=matrix(0,ncol=(K+1),nrow=length(Homo))
     for (r in 1:length(Homo)){
-      Homo_estimates[r,]=c(Homo[r],rep(step1_estimates[Homo[r]],K))
+      Homo_estimates[r,]=c(Homo_names[r],rep(step1_estimates[Homo[r]],K))
     }
     Homo_estimates=as.matrix(Homo_estimates)
     Homo_estimates=cbind(Homo_estimates,rep("Homogeneous", nrow(Homo_estimates)))
@@ -266,7 +271,7 @@ HomUHet<-function(data,solution_path_plot=FALSE){
     Heter_estimates=matrix(0,ncol=(K+1),nrow=length(Heter))
 
     for (p in 1:length(Heter)){
-      Heter_estimates[p,]=c(Heter[p],ebic.fitted.delta[ebic.fitted.delta$V1==Heter[p],2]+step1_estimates[Heter[p]])
+      Heter_estimates[p,]=c(Heter_names[p],ebic.fitted.delta[ebic.fitted.delta$V1==Heter[p],2]+step1_estimates[Heter[p]])
     }
 
     Heter_estimates=as.matrix(Heter_estimates)
@@ -292,8 +297,8 @@ if (solution_path_plot==TRUE){
 
 
 
-  list(Homo=Homo,
-       Heter=Heter,
+  list(Homo=Homo_names,
+       Heter=Heter_names,
        coefficients=coefficients)
 }
 
@@ -301,349 +306,360 @@ if (solution_path_plot==TRUE){
 #'
 #' this function simulate data
 #'
-#' @param Pred_type the predictor type; choose between Gaussian or SNP
-#' @param J the number of predictors.
-#' @param K the number of studies.
-#' @param beta the K x J coefficient matrix
-#' @param level the level of heterogeneity. ignored if "beta" is supplied. "l" stands for low, "m" stands for medium, and "h" stands for high.
+#' @param age TRUE if covariate age should be included. simulated from N (40, 5)
+#' @param sex TRUE if covariate sex should be included. simulated from Bernoulli (p), where p is a random number between 0 and 1.
+#' @param n_homo number of homogeneous coefficients.
+#' @param n_heter number of heterogeneous coefficients.
+#' @param n_cont the number of continuous predictors. 0 if there will be no continuous predictors
+#' @param n_SNP the number of SNP predictors. 0 if there will be no SNP predictors
 #' @param rho a number between 0 and 1. controlling the degree of correlation between predictors
 #' @param sigma a positive number. controlling the added noise to the simulated response variable
-#' @param allele_freq a J-length vector containing the allele frequencies for the J SNPs. ignored if Pred_type="Gaussian"
 #' @param nlower the lower bound of the K sample sizes
 #' @param nupper the upper bound of the K sample sizes
+#' @param beta if the users wish to supply the coefficients on their own,
+#' enter a coefficient matrix where the columns
+#' containing the K coefficients of each predictor, for all genetic and non-genetic predictors.
 #' @importFrom mvtnorm rmvnorm
 #' @return the simulated data
+#' \item{data}{the simulated data}
+#' \item{beta}{the simulated beta matrix}
+#' \item{homo_index}{the column numbers of homogeneous coefficients}
+#' \item{heter_index}{the column numbers of heterogeneous coefficients}
 #' @export
-HomUHet.sim<-function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL,
-                      rho=0.5,sigma=2, level=c("l","m","e"),
-                      nlower=50,nupper=300, allele_freq){
+HomUHet.sim<-function(age=TRUE, sex=TRUE, n_homo, n_heter, K, n_cont, n_SNP,
+                      rho=0.5, sigma=2,
+                      nlower=50, nupper=300, beta=NULL) {
 
 
-  if (is.null(beta) && (K %in% c(4, 10)) && J > 270) {
 
-    v=c(1,rep(NA,(J-1)))
 
-    for (i in 2:J){
-      v[i]=rho^(i-1)
-    }
+       if (n_SNP > 0) {
 
-    Sigma=toeplitz(v)
-    t=0
-    x=rep(0,J)
-    y=0
-    study_label=0
-    b=rep(0,40)
-    n=0
-
-    if (K==4){
-      if (level=="l"){
-        fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-        b.matrix=matrix(0,ncol=30,nrow=K)
-
-        for (j in 1:30){
-          if (j<11){
-            b.matrix[,j]=sample(c(runif(2,1,1.5),runif(2,-1.5,-1)),K)
-          }
-
-          else {if (j<21){
-            b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,2,2.5),runif(2,3,3.5)),K)
-          }
-            else {
-              b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-2.5,-2),runif(2,-3.5,-3)),K)
-            }
-          }
-        }
-        modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-        for (j in 1:30){
-
-          modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-        }
-
-      } else if (level=="m"){
-        fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-        b.matrix=matrix(0,ncol=30,nrow=K)
-
-        for (j in 1:30){
-          if (j<11){
-            b.matrix[,j]=sample(c(runif(2,2,2.5),runif(2,-2.5,-2)),K)
-          }
-
-          else {if (j<21){
-            b.matrix[,j]=sample(c(runif(1,1,1.5),runif(1,3,3.5),runif(2,5,5.5)),K)
-          }
-            else {
-              b.matrix[,j]=sample(c(runif(1,-1.5,-1),runif(1,-3.5,-3),runif(2,-5.5,-5)),K)
-            }
-          }
-        }
-
-        modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-        for (j in 1:30){
-
-          modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-        }
-
-      } else {
-        fixed.b=c(runif(5,3,6),runif(5,-6,-3))
-        b.matrix=matrix(0,ncol=30,nrow=K)
-
-        for (j in 1:30){
-          if (j<11){
-            b.matrix[,j]=sample(c(runif(2,5,6.5),runif(2,-6.5,-5)),K)
-          }
-
-          else {if (j<21){
-            b.matrix[,j]=sample(c(runif(1,1,2),runif(1,5,6),runif(2,9,10)),K)
-          }
-            else {
-              b.matrix[,j]=sample(c(runif(1,-2,-1),runif(1,-6,-5),runif(2,-10,-9)),K)
-            }
-          }
-        }
-        modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-        for (j in 1:30){
-
-          modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-        }
-
-      }} else {
-
-        if (level=="l"){
-          fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-          b.matrix=matrix(0,ncol=30,nrow=K)
-
-          for (j in 1:30){
-            if (j<11){
-              b.matrix[,j]=sample(c(runif(5,1,1.5),runif(5,-1.5,-1)),K)
-            }
-
-            else {if (j<21){
-              b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,2,2.5),runif(4,3,3.5)),K)
-            }
-              else {
-                b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-2.5,-2),runif(4,-3.5,-3)),K)
-              }
-            }
-          }
-          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-          for (j in 1:30){
-
-            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-          }
-        } else if (level=="m"){
-          fixed.b=c(runif(5,1,3),runif(5,-3,-1))
-          b.matrix=matrix(0,ncol=30,nrow=K)
-
-          for (j in 1:30){
-            if (j<11){
-              b.matrix[,j]=sample(c(runif(5,2,2.5),runif(5,-2.5,-2)),K)
-            }
-
-            else {if (j<21){
-              b.matrix[,j]=sample(c(runif(3,1,1.5),runif(3,3,3.5),runif(4,5,5.5)),K)
-            }
-              else {
-                b.matrix[,j]=sample(c(runif(3,-1.5,-1),runif(3,-3.5,-3),runif(4,-5.5,-5)),K)
-              }
-            }
-          }
-
-          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-          for (j in 1:30){
-
-            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-          }
-        } else {
-          fixed.b=c(runif(5,1,6),runif(5,-6,-1))
-          b.matrix=matrix(0,ncol=30,nrow=K)
-
-          for (j in 1:30){
-            if (j<11){
-              b.matrix[,j]=sample(c(runif(5,5,6.5),runif(5,-6.5,-5)),K)
-            }
-
-            else {if (j<21){
-              b.matrix[,j]=sample(c(runif(3,1,2),runif(3,5,6),runif(4,9,10)),K)
-            }
-              else {
-                b.matrix[,j]=sample(c(runif(3,-2,-1),runif(3,-6,-5),runif(4,-10,-9)),K)
-              }
-            }
-          }
-          modified.b.matrix<-matrix(0,ncol=60,nrow=K)
-
-          for (j in 1:30){
-
-            modified.b.matrix[,(j*2-1)]=b.matrix[,j]
-          }
-        }
-
+         allele_freq=runif(n_SNP, 0.05,0.5)
       }
 
-    if (Pred_type=="Gaussian"){
-      while (t<K){
-        n.temp=sample(seq(nlower,nupper),1)
-        n=c(n,n.temp)
-        study_label.temp=rep(t+1,n.temp)
-        study_label=c(study_label,study_label.temp)
-        temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-                                method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-        temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])
-        temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
-        temp.y=temp.y
-        x=rbind(x,scale(temp.x))
-        y=c(y,temp.y)
 
-        t=t+1
-      }} else {
-        allele.freq=runif(J,0.05,0.5)
-        while (t<K){
-          n.temp=sample(seq(nlower,nupper),1)
-          n=c(n,n.temp)
-          study_label.temp=rep(t+1,n.temp)
-          study_label=c(study_label,study_label.temp)
-          divider=rep(0,J)
-          temp.x1=matrix(0,ncol=J,nrow=n.temp)
-          temp.x2=matrix(0,ncol=J,nrow=n.temp)
-
-
-          temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-                                   method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-          temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-                                   method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-
-          for (j in 1:J){
-
-            temp.x1[,j]=ifelse(temp.z1[,j]<=qnorm(allele.freq[j]),1,0)
-            temp.x2[,j]=ifelse(temp.z2[,j]<=qnorm(allele.freq[j]),1,0)
-            divider[j]=sqrt(allele.freq[j]*(1-allele.freq[j]))
-
-
-
-          }
-
-          temp.x=temp.x1+temp.x2
-          temp.rb=c(fixed.b[1:5],rep(0,100),fixed.b[6:10],rep(0,100),modified.b.matrix[(t+1),])/divider[1:270]
-          temp.y=rnorm(1,0,5)+temp.x[,1:270]%*%temp.rb+rnorm(n.temp,0,sigma)
-          temp.x=scale(temp.x)
-          temp.x[is.na(temp.x)]<-0
-          x=rbind(x,temp.x)
-
-          y=c(y,temp.y)
-
-          t=t+1
-        }
-      }
-    x=x[-1,]
-    y=y[-1]
-    n=n[-1]
-    study_label=study_label[-1]
-
-
-    }  else if (is.null(beta)){
-      stop("beta is missing")
-    } else {
-
-      if(K != nrow(beta) ){
-        stop ("K does not equal to the number of rows of beta")
-      } else if (J != ncol(beta)) {
-        stop ("J does not equal to the number of columns of beta")
-      } else if (J != length(allele_freq)) {
-        stop ("J needs to match the length of allele_freq")
-      }
-
-      K=nrow(beta)
-      J=ncol(beta)
-      v=c(1,rep(NA,(J-1)))
-
-      for (i in 2:J){
-        v[i]=rho^(i-1)
-      }
-
-      Sigma=toeplitz(v)
+      J=sum(c(isTRUE(age), isTRUE(sex),n_cont, n_SNP))
       t=0
       x=rep(0,J)
       y=0
+      age=0
+      sex=0
       study_label=0
       b=rep(0,40)
       n=0
 
 
+      if(is.null(beta)){
 
-      if (Pred_type=="Gaussian"){
+
+
+      beta_gene=HomUHet.sim.beta(J=J-sum(c(isTRUE(age), isTRUE(sex))),K=K,n_homo=n_homo,
+                            n_heter=n_heter, level=sample(c("l", "m", "h"),1))
+      beta=beta_gene$beta
+      homo_index=beta_gene$homo_index+sum(c(isTRUE(age), isTRUE(sex)))
+      heter_index=beta_gene$heter_index+sum(c(isTRUE(age), isTRUE(sex)))
+
+      ###### re organizing positions of homo heter when both cont and SNP preds exist
+
+      if (n_cont > 0 & n_SNP > 0){
+        beta_gene_re=matrix(0, ncol(beta_gene$beta), nrow=nrow(beta_gene$beta))
+
+        homo_index_re=sample(seq(1:ncol(beta_gene_re)), n_homo)
+        heter_index_re=sample(seq(1:ncol(beta_gene_re))[-homo_index_re], n_heter)
+        beta_gene_re[,homo_index_re]=(beta_gene$beta)[,beta_gene$homo_index]
+        beta_gene_re[,heter_index_re]=(beta_gene$beta)[,beta_gene$heter_index]
+        beta=beta_gene_re
+        homo_index=homo_index_re+sum(c(isTRUE(age), isTRUE(sex)))
+        heter_index=heter_index_re+sum(c(isTRUE(age), isTRUE(sex)))
+      }
+
+
+      ####### binding age sex coefs
+
+      beta=cbind(matrix(rep(rep(1,K), sum(c(isTRUE(age), isTRUE(sex)))), nrow=K),
+                 beta)
+
+      } else {
+
+
+
+        check_func<-function(x){
+
+
+          if(length(unique(x)) > 1){
+            return(d="heter")
+          } else {
+            d=ifelse(unique(x)==0, "noise", "homo")
+
+            return(d)
+          }
+
+        }
+
+        check_index=apply(beta, 2, check_func)
+
+        homo_index=which(check_index=="homo")
+        heter_index=which(check_index=="heter")
+      }
+
         while (t<K){
+
           n.temp=sample(seq(nlower,nupper),1)
-          n=c(n,n.temp)
-          study_label.temp=rep(t+1,n.temp)
-          study_label=c(study_label,study_label.temp)
-          temp.x=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
-                                  method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-          temp.rb=beta[(t+1),]
-          temp.y=rnorm(1,0,5)+temp.x%*%temp.rb+rnorm(n.temp,0,sigma)
-          temp.y=temp.y
-          x=rbind(x,scale(temp.x))
-          y=c(y,temp.y)
+          temp.x=matrix(0, ncol=J, nrow=n.temp)
 
-          t=t+1
-        }} else {
-          allele.freq=allele_freq
-          while (t<K){
-            n.temp=sample(seq(nlower,nupper),1)
-            n=c(n,n.temp)
-            study_label.temp=rep(t+1,n.temp)
-            study_label=c(study_label,study_label.temp)
-            divider=rep(0,J)
-            temp.x1=matrix(0,ncol=J,nrow=n.temp)
-            temp.x2=matrix(0,ncol=J,nrow=n.temp)
+          if (age==TRUE){
+            temp_age=rnorm(n.temp, 40, 5)
+
+          } else {
+            temp_age=NULL
+          }
+
+          if (sex==TRUE) {
+            temp_sex=rbinom(n.temp, 1, runif(1,0,1))
+
+          } else {
+            temp_sex= NULL
+          }
 
 
-            temp.z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+          # Cont
+
+          if (n_cont > 0){
+
+            if (n_cont==1){
+              temp_cont_x=rnorm(n.temp, 0, 1)
+            }
+
+            v=c(1,rep(NA,((n_cont)-1)))
+
+            for (i in 2:(n_cont)){
+              v[i]=rho^(i-1)
+            }
+
+            Sigma=toeplitz(v)
+
+            temp_cont_x=mvtnorm::rmvnorm(n.temp, mean = rep(0, n_cont), sigma = Sigma,
+                                    method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
+
+          } else {
+            temp_cont_x=NULL
+          }
+
+          # SNP
+
+          if (n_SNP > 0) {
+
+            if (n_SNP==1){
+              divider=sqrt(allele_freq*(1-allele_freq))
+              temp_snp_z1=rnorm(n.temp, 0, 1)
+              temp_snp_z2=rnorm(n.temp, 0, 1)
+              temp_snp_x1=ifelse(temp_snp_z1<=qnorm(allele_freq),1,0)
+              temp_snp_x2=ifelse(temp_snp_z2<=qnorm(allele_freq),1,0)
+              temp_snp_x=(temp_snp_x1+temp_snp_x2)*divider
+            }
+
+            v=c(1,rep(NA,((n_SNP)-1)))
+
+            for (i in 2:(n_SNP)){
+              v[i]=rho^(i-1)
+            }
+
+            Sigma=toeplitz(v)
+
+            divider=rep(0,n_SNP)
+            temp_snp_x1=matrix(0,ncol=n_SNP,nrow=n.temp)
+            temp_snp_x2=matrix(0,ncol=n_SNP,nrow=n.temp)
+
+
+            temp_snp_z1=mvtnorm::rmvnorm(n.temp, mean = rep(0, n_SNP), sigma = Sigma,
                                      method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
-            temp.z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, J), sigma = Sigma,
+            temp_snp_z2=mvtnorm::rmvnorm(n.temp, mean = rep(0, n_SNP), sigma = Sigma,
                                      method="svd", pre0.9_9994 = FALSE, checkSymmetry = TRUE)
 
-            for (j in 1:J){
+            for (j in 1:n_SNP){
 
-              temp.x1[,j]=ifelse(temp.z1[,j]<=qnorm(allele.freq[j]),1,0)
-              temp.x2[,j]=ifelse(temp.z2[,j]<=qnorm(allele.freq[j]),1,0)
-              divider[j]=sqrt(allele.freq[j]*(1-allele.freq[j]))
-
+              temp_snp_x1[,j]=ifelse(temp_snp_z1[,j]<=qnorm(allele_freq[j]),1,0)
+              temp_snp_x2[,j]=ifelse(temp_snp_z2[,j]<=qnorm(allele_freq[j]),1,0)
+              divider[j]=sqrt(allele_freq[j]*(1-allele_freq[j]))
 
 
             }
 
-            temp.x=temp.x1+temp.x2
-            temp.rb=beta[(t+1),]/divider
-            temp.y=rnorm(1,0,5)+temp.x%*%temp.rb+rnorm(n.temp,0,sigma)
-            temp.x=scale(temp.x)
-            temp.x[is.na(temp.x)]<-0
-            x=rbind(x,temp.x)
+            temp_snp_x=(temp_snp_x1+temp_snp_x2)*divider
 
-            y=c(y,temp.y)
+          } else {
 
-            t=t+1
+            temp_snp_x=NULL
           }
+
+
+          temp.x=cbind(temp_age, temp_sex, temp_cont_x, temp_snp_x)
+          temp.x=cbind(temp.x, matrix(0, ncol=J-ncol(temp.x), nrow=n.temp))
+
+          study_label.temp=rep(t+1,n.temp)
+
+
+          temp.rb=beta[(t+1),]
+          temp.y=rnorm(1,0,5)+temp.x%*%temp.rb+rnorm(n.temp,0,sigma)
+
+          x=rbind(x,scale(temp.x))
+          y=c(y,temp.y)
+          n=c(n,n.temp)
+          study_label=c(study_label,study_label.temp)
+          t=t+1
         }
+
       x=x[-1,]
       y=y[-1]
       n=n[-1]
       study_label=study_label[-1]
 
+      data=as.data.frame(cbind(study_label, y, x))
+
+      if (age==TRUE){
+        age_name="age"
+      } else {
+        age_name=NULL
+      }
+
+      if (sex==TRUE){
+        sex_name="sex"
+      } else {
+        sex_name=NULL
+      }
+
+      genetic_pred_num = J-sum(c(!is.null(age_name),!is.null(sex_name)))
+      pred_names=c(age_name, sex_name,paste(rep("Pred_V",genetic_pred_num), seq(1:genetic_pred_num),sep="" ))
+
+      names(data)[-(1:2)]=pred_names
+
+       #####
+      homo_index=homo_index+2
+      heter_index=heter_index+2
+
+      list(data=data, beta=beta, homo_index=homo_index,
+           heter_index=heter_index)
+
 
     }
 
- data=as.data.frame(cbind(study_label, y, x))
 
- pred_names=paste(rep("Pred_V",ncol(x)), seq(1:ncol(x)),sep="" )
 
- names(data)[-(1:2)]=pred_names
 
-return(data)
+#' simulates homogeneous and heterogeneous coefficients of predictors
+#'
+#' this function outputs matrix of coefficients of predictors
+#'
+#' @param J The total number of predictors including the predictors with homogeneous and heterogeneous effects and the predictors without effects
+#' @param K The number of studies
+#' @param n_homo the number of homogeneous coefficients
+#' @param n_heter the number of heterogeneous coefficients
+#' @param level the level of heterogeneity in the heterogeneous coefficients,
+#' where "l" stands for low, "m" stands for medium and "h" stands for high.
+#'
+#' @return the simulated coefficient matrix and miscellenance information about it
+#'  \item{beta}{the K x J coefficient matrix}
+#'  \item{J}{the number of predictors including both predictors which have effects and which do not}
+#'  \item{K}{the number of studies}
+#'  \item{homo_index}{a vector containing the column numbers of homogeneous coefficients in the coefficient matrix}
+#'  \item{heter_index}{a vector containing the column numbers of homogeneous coefficients in the coefficient matrix}
+#' @export
+HomUHet.sim.beta<-function(J, K, n_homo, n_heter, level=c("l","m","h")){
+
+  # divide homo:
+
+  n_homo_1=floor(n_homo/2)
+
+  n_homo_2=n_homo-floor(n_homo/2)
+
+
+  # divide hetero cluster:
+  cluster_1=floor(n_heter/3)
+  cluster_2=floor(n_heter/3)
+  cluster_3=n_heter-2*(floor(n_heter/3))
+
+  # heter, divide K:
+
+  # cluster 1
+
+  n_heter_c1_1=floor(K/2)
+  n_heter_c1_2=K-floor(K/2)
+
+  # cluster 2 and 3 :
+  n_heter_c2_1=floor(K/3)
+  n_heter_c2_2=floor(K/3)
+  n_heter_c2_3=K-2*floor(K/3)
+
+
+
+  l_param=c(1,3,-3,-1,
+            1,1.5,-1.5,-1,
+            1,1.5,2,2.5,3,3.5,
+            -1.5,-1,-2.5,-2,-3.5,-3)
+  m_param=c(1,3,-3,-1,
+            2,2.5,-2.5,-2,
+            1,1.5,3,3.5,5,5.5,
+            -1.5,-1,-3.5,-3,-5.5,-5)
+
+  h_param=c(3,6,-6,-3,
+            5,6.5,-6.5,-5,
+            1,2,5,6,9,10,
+            -2,-1,-6,-5,-10,-9)
+
+  if (level=="l"){
+    param=l_param
+  } else if (level=="m") {
+    param=m_param
+  } else if (level=="h") {
+    param=h_param
+  }
+
+
+  homo=c(runif(n_homo_1,param[1],param[2]),runif(n_homo_2,param[3],param[4]))
+
+  homo=t(matrix(rep(homo,K), ncol=K))
+
+  heter=matrix(0, ncol=n_heter, nrow=K)
+
+
+  for (j in 1:cluster_1){
+    heter[,j]=sample(c(runif(n_heter_c1_1, param[5],param[6]), runif(n_heter_c1_2, param[7],param[8])),K)
+  }
+
+  for (j in (cluster_1+1):(2*cluster_1)){
+    heter[,j]=sample(c(runif(n_heter_c2_1, param[9],param[10]), runif(n_heter_c2_2, param[11],param[12]), runif(n_heter_c2_3, param[13],param[14])),K)
+  }
+
+  for (j in (2*cluster_1+1):(2*cluster_1+cluster_3)){
+    heter[,j]=sample(c(runif(n_heter_c2_1, param[15],param[16]), runif(n_heter_c2_2, param[17],param[18]), runif(n_heter_c2_3, param[19],param[20])),K)
+  }
+
+  number_col=n_homo_1+floor((1/14)*J)+n_homo_2+floor((1/14)*J)+2*n_heter
+
+  beta=matrix(0,ncol=J, nrow=K)
+
+  if (n_homo > 0){
+    homo_index=c(1:n_homo_1,c((n_homo_1+floor((1/14)*J)+1):(n_homo_1+floor((1/14)*J)+n_homo_2)))
+  } else {
+    homo_index=NULL
+  }
+
+  if (n_heter > 0){
+    heter_index=seq(n_homo+2*floor((1/14)*J)+1, n_homo+2*floor((1/14)*J)+n_heter*2, by=2)
+  } else {
+    heter_index=NULL
+  }
+
+
+  beta[,homo_index]=homo
+
+  beta[,heter_index]=heter
+
+
+
+  list(J=J, K=K, beta=beta,
+       homo_index=homo_index, heter_index=heter_index)
+
+
 }
-
-

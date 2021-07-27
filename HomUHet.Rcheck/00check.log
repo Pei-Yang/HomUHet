@@ -2,7 +2,7 @@
 * using R version 4.0.3 (2020-10-10)
 * using platform: x86_64-apple-darwin17.0 (64-bit)
 * using session charset: UTF-8
-* using option ‘--as-cran’
+* using options ‘--no-manual --ignore-vignettes --as-cran’
 * checking for file ‘HomUHet/DESCRIPTION’ ... OK
 * this is package ‘HomUHet’ version ‘0.0.0.9000’
 * package encoding: UTF-8
@@ -18,7 +18,6 @@
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking for future file timestamps ... OK
-* checking ‘build’ directory ... OK
 * checking DESCRIPTION meta-information ... WARNING
 Dependence on R version ‘4.0.3’ not with patchlevel 0
 * checking top-level files ... NOTE
@@ -39,16 +38,22 @@ Non-standard file/directory found at top level:
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
 * checking R code for possible problems ... NOTE
+HomUHet: no visible global function definition for ‘past’
 HomUHet: no visible global function definition for ‘%>%’
 HomUHet: no visible binding for global variable ‘V1’
-HomUHet.sim: no visible global function definition for ‘toeplitz’
-HomUHet.sim: no visible global function definition for ‘runif’
 HomUHet.sim: no visible global function definition for ‘rnorm’
+HomUHet.sim: no visible global function definition for ‘rbinom’
+HomUHet.sim: no visible binding for global variable ‘temp.n’
+HomUHet.sim: no visible global function definition for ‘toeplitz’
+HomUHet.sim: no visible binding for global variable ‘allele.freq’
 HomUHet.sim: no visible global function definition for ‘qnorm’
+HomUHet.sim.beta: no visible global function definition for ‘runif’
+HomUHet.sim.beta : heter_gen: no visible global function definition for
+  ‘runif’
 Undefined global functions or variables:
-  %>% V1 qnorm rnorm runif toeplitz
+  %>% V1 allele.freq past qnorm rbinom rnorm runif temp.n toeplitz
 Consider adding
-  importFrom("stats", "qnorm", "rnorm", "runif", "toeplitz")
+  importFrom("stats", "qnorm", "rbinom", "rnorm", "runif", "toeplitz")
 to your NAMESPACE file.
 * checking Rd files ... OK
 * checking Rd metadata ... OK
@@ -149,42 +154,9 @@ Variables in data frame 'HomUHet_data'
 * checking contents of ‘data’ directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
-* checking sizes of PDF files under ‘inst/doc’ ... OK
-* checking installed files from ‘inst/doc’ ... OK
-* checking files in ‘vignettes’ ... OK
+* checking files in ‘vignettes’ ... SKIPPED
 * checking examples ... NONE
-* checking for unstated dependencies in vignettes ... OK
-* checking package vignettes in ‘inst/doc’ ... OK
-* checking re-building of vignette outputs ... WARNING
-Error(s) in re-building vignettes:
-  ...
---- re-building ‘HomUHet_vignette.Rmd’ using rmarkdown
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-! Missing $ inserted.
-<inserted text> 
-                $
-l.286 ...files/figure-latex/unnamed-chunk-4-1.pdf}
-
-Try to find the following text in /Users/sephinapeiyang/Documents/R packages/HomUHet/HomUHet.Rcheck/vign_test/HomUHet/vignettes/HomUHet_vignette.Rmd:
-  ...files/figure-latex/unnamed-chunk-4-1.pdf} 
-
-You may need to add $ $ around a certain inline R expression `r ` in /Users/sephinapeiyang/Documents/R packages/HomUHet/HomUHet.Rcheck/vign_test/HomUHet/vignettes/HomUHet_vignette.Rmd (see the above hint). See https://github.com/rstudio/rmarkdown/issues/385 for more info.
-Error: processing vignette 'HomUHet_vignette.Rmd' failed with diagnostics:
-LaTeX failed to compile /Users/sephinapeiyang/Documents/R packages/HomUHet/HomUHet.Rcheck/vign_test/HomUHet/vignettes/HomUHet_vignette.tex. See https://yihui.org/tinytex/r/#debugging for debugging tips. See HomUHet_vignette.log for more info.
---- failed re-building ‘HomUHet_vignette.Rmd’
-
-SUMMARY: processing the following file failed:
-  ‘HomUHet_vignette.Rmd’
-
-Error: Vignette re-building failed.
-Execution halted
-
-* checking PDF version of manual ... OK
-* checking for non-standard things in the check directory ... NOTE
-Found the following files/directories:
-  ‘.DS_Store’
+* checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK
 * DONE
-Status: 3 WARNINGs, 3 NOTEs
+Status: 2 WARNINGs, 2 NOTEs

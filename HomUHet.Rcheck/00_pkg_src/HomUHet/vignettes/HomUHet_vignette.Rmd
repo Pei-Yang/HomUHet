@@ -55,7 +55,7 @@ In this package, we provide the following functions
 
 * HomUHet.sim simulate multiple data sets with correlated predictors, homogeneous and heterogeneous effects of predictors and generate the response variable.
 
-* HomUHet.sim.beta simulate the coefficient matrix for all predictors that can be used in HomUHet.sim.
+* HomUHet.sim.beta simulate the coefficient matrix for predictors that can be used in HomUHet.sim.
 
 The usage of the package will be illustrated in the following sections.
 
@@ -66,7 +66,7 @@ HomUHet can be used to identify and separates predictors with homogeneous or het
 
 ## 2.1 Input data for HomUHet
 
-HomUHet <- function (data, solution_path_plot = FALSE)
+HomUHet (data, solution_path_plot = FALSE)
 
 
 <br>
@@ -120,22 +120,74 @@ fit$Heter # the identified heterogeneous predictors
 
 The vertical black lines in the two solution path plots mark the values of lambda used by HomUHet in two steps to generate the outputted values. 
 
-# 3.1 Simulating multiple data sets 
 
-HomUHet.sim <- function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL, rho=0.5, sigma, level=c("l", "m", "e"), nlower, nupper, allele_freq)
+# 3 Simulating data
+
+We provide two functions for simulating data sets. One of them simulates the coefficients of predictors and the other simulates the data sets when the coefficients of predictors are supplied. By having both functions, the users have the option of using their own set of coefficients while having a convenient way to simulate the coefficients from scratch as well.
+
+##3.1 Simulating beta
+
+simulates homogeneous and heterogeneous coefficients of predictors
+
+this function outputs matrix of coefficients of predictors
+
+HomUHet.sim.beta(J, K, n_homo, n_heter, param_homo=c(-10,10),
+                           param_heter=c(-10,10), example=c(c("l","m","h"),c(4,10)))
+
+  **J** The total number of predictors including the predictors with homogeneous and heterogeneous effects and the predictors without effects
+  **K** The number of studies
+  **n_homo** the number of homogeneous coefficients
+  **n_heter** the number of heterogeneous coefficients
+  **param_homo** the two parameters of the uniform distribution used to simulate the homogeneous coefficients
+  **param_heter** the two parameters of the uniform distribution used to simulate the heterogeneous coefficients
+  **example** provides some examples of coefficient matrix for various number of studies (4 or 10) and levels of heterogeneity.
+ enter the level of heterogeneity in the first entry. "l", "m", and "h" represent the level of heterogeneity in coefficients
+ enter the number of studies in the second entry. 4 or 10.
+ where "l" stands for low, "m" stands for medium and "h" stands for high.
+
+```{r}
+ 
+ HomUHet.sim.beta(J, K, n_homo, n_heter, param_homo=c(-10,10),
+                           param_heter=c(-10,10), example=c(c("l","m","h"),c(4,10)))
+                           
+```
+ 
+  the simulated coefficient matrix and miscellenance information about it
+  beta the K x J coefficient matrix
+  J the number of predictors including both predictors which have effects and which do not
+  K the number of studies
+  homo_index a vector containing the column numbers of homogeneous coefficients in the coefficient matrix
+  heter_index a vector containing the column numbers of homogeneous coefficients in the coefficient matrix
+ 
+ 
+ 
+
+## 3.2 Simulating the data sets 
+
+HomUHet.sim (J, K, param_age=NULL, param_sex=NULL, n_cont, n_SNP, allele_freq, beta,
+                      rho=0.5,sigma=2,
+                      nlower=50,nupper=300 )
 
 <br>
 **Arguments**
 
-**Pred_type** indicates which type of predictor the user wishes to simulate.
 
 **J** is the number of predictors.
 
 **K** is the number of studies.
 
+**param_age**
+
+**param_sex**
+
+**n_cont**
+
+**n_SNP**
+
+**allele_freq**
+
 **beta** the coefficient matrix of dimension $K \times J$ containing coefficients for the homogeneous, heterogeneous and unassociated predictors.
 
-**level** represents the level of heterogeneity in the effects of predictors. "l" stands for low, "m" stands for medium, and "h" stands for high. used in a default example and ignored if beta is supplied.
 
 **rho** should be a number between 0 and 1. This controls the degree of correlation between predictors.
 
@@ -145,19 +197,19 @@ HomUHet.sim <- function(Pred_type=c("Gaussian","SNP"), J, K, beta=NULL, rho=0.5,
 
 **nupper** sets the upper bound of the K sample sizes
 
-**allele_freq** a J-length vector containing the allele frequencies of the $J$ predictors. required only if Pred_type is $"SNP"$.
 
-the following shows an example where 3 studies and 12 SNP predictors are to be generated. Among the 12 predictors, the first predictor has homogeneous effects (all equal to 2) and the $11^{th}$ predictor has heterogeneous effects (2, 4, 6, respectively in the 3 studies).
+the following shows an example where 4 studies and 20 predictors including age, sex, 5 continous predictors and 13 SNPs are to be generated. 
+
 
 ```{r}
-beta=cbind(c(2,2,2), matrix(0,ncol=10,nrow=3),c(2,4,6))
+beta=cbind(c(1,1,1,1), c(1,1,1,1), matrix(0,ncol=1, nrow=4), c(1,2,3,3), matrix(0,ncol=15, nrow=4), c(0.5,2,3,5))
 # constructing a beta matrix
 K=nrow(beta) # the number of studies
 J=ncol(beta) # the number of predictors
 allele_freq=runif(J,0.05,0.5) # allele frequency 
-mydata=HomUHet.sim(Pred_type="SNP", J=J, K=K, beta=beta,
+mydata=HomUHet.sim (J=20, K=4, param_age=c(40, 5), param_sex=0.5, n_cont=5, n_SNP=13, allele_freq=runif(13, 0.05, 0.5), beta=beta,
                       rho=0.5,sigma=2,
-                      nlower=50,nupper=200, allele_freq=allele_freq)
+                      nlower=50,nupper=120 )
 
 mydata[1:2,1:5] # showing the first few lines and columns of the output data.
 
@@ -165,6 +217,7 @@ mydata[1:2,1:5] # showing the first few lines and columns of the output data.
 
 <br>
 **value ** The output is a data frame containing, in that order, the simulated study label, response variable and predictors.
+
 
 
 

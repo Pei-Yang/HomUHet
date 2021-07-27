@@ -5,24 +5,34 @@
 \title{simulate multiple data sets with both homogeneous and heterogeneous effects from the predictors}
 \usage{
 HomUHet.sim(
-  Pred_type = c("Gaussian", "SNP"),
   J,
   K,
-  beta = NULL,
+  param_age = NULL,
+  param_sex = NULL,
+  n_cont,
+  n_SNP,
+  allele_freq,
+  beta,
   rho = 0.5,
   sigma = 2,
-  level = c("l", "m", "e"),
   nlower = 50,
-  nupper = 300,
-  allele_freq
+  nupper = 300
 )
 }
 \arguments{
-\item{Pred_type}{the predictor type; choose between Gaussian or SNP}
-
-\item{J}{the number of predictors.}
+\item{J}{the total number of predictors.}
 
 \item{K}{the number of studies.}
+
+\item{param_age}{should be a vector containing the mean of age, followed by the standard deviation.}
+
+\item{param_sex}{should be a number between 0 and 1 indicating the proportion of one sex}
+
+\item{n_cont}{the number of continuous predictors. 0 if there will be no continuous predictors}
+
+\item{n_SNP}{the number of SNP predictors. 0 if there will be no SNP predictors}
+
+\item{allele_freq}{a vector of length n_SNP containing the allele frequencies for the SNPs.}
 
 \item{beta}{the K x J coefficient matrix}
 
@@ -30,13 +40,9 @@ HomUHet.sim(
 
 \item{sigma}{a positive number. controlling the added noise to the simulated response variable}
 
-\item{level}{the level of heterogeneity. ignored if "beta" is supplied. "l" stands for low, "m" stands for medium, and "h" stands for high.}
-
 \item{nlower}{the lower bound of the K sample sizes}
 
 \item{nupper}{the upper bound of the K sample sizes}
-
-\item{allele_freq}{a J-length vector containing the allele frequencies for the J SNPs. ignored if Pred_type="Gaussian"}
 }
 \value{
 the simulated data

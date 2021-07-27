@@ -5,41 +5,51 @@
 \title{simulate multiple data sets with both homogeneous and heterogeneous effects from the predictors}
 \usage{
 HomUHet.sim(
-  Pred_type = c("Gaussian", "SNP"),
-  J,
+  age = TRUE,
+  sex = TRUE,
+  n_homo,
+  n_heter,
   K,
-  beta = NULL,
+  n_cont,
+  n_SNP,
   rho = 0.5,
   sigma = 2,
-  level = c("l", "m", "e"),
   nlower = 50,
   nupper = 300,
-  allele_freq
+  beta = NULL
 )
 }
 \arguments{
-\item{Pred_type}{the predictor type; choose between Gaussian or SNP}
+\item{age}{TRUE if covariate age should be included. simulated from N (40, 5)}
 
-\item{J}{the number of predictors.}
+\item{sex}{TRUE if covariate sex should be included. simulated from Bernoulli (p), where p is a random number between 0 and 1.}
 
-\item{K}{the number of studies.}
+\item{n_homo}{number of homogeneous coefficients.}
 
-\item{beta}{the K x J coefficient matrix}
+\item{n_heter}{number of heterogeneous coefficients.}
+
+\item{n_cont}{the number of continuous predictors. 0 if there will be no continuous predictors}
+
+\item{n_SNP}{the number of SNP predictors. 0 if there will be no SNP predictors}
 
 \item{rho}{a number between 0 and 1. controlling the degree of correlation between predictors}
 
 \item{sigma}{a positive number. controlling the added noise to the simulated response variable}
 
-\item{level}{the level of heterogeneity. ignored if "beta" is supplied. "l" stands for low, "m" stands for medium, and "h" stands for high.}
-
 \item{nlower}{the lower bound of the K sample sizes}
 
 \item{nupper}{the upper bound of the K sample sizes}
 
-\item{allele_freq}{a J-length vector containing the allele frequencies for the J SNPs. ignored if Pred_type="Gaussian"}
+\item{beta}{if the users wish to supply the coefficients on their own,
+enter a coefficient matrix where the columns
+containing the K coefficients of each predictor, for all genetic and non-genetic predictors.}
 }
 \value{
 the simulated data
+\item{data}{the simulated data}
+\item{beta}{the simulated beta matrix}
+\item{homo_index}{the column numbers of homogeneous coefficients}
+\item{heter_index}{the column numbers of heterogeneous coefficients}
 }
 \description{
 this function simulate data
