@@ -1,12 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  15 MAR 2021 22:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  28 JUL 2021 11:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview-1
-50975059a1ac.dir/HomUHet_vignette.tex
-
-(/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview-15
-0975059a1ac.dir/HomUHet_vignette.tex
+**HomUHet_vignette.tex
+(./HomUHet_vignette.tex
 LaTeX2e <2017-04-15>
 Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls
@@ -990,42 +987,30 @@ LaTeX Font Info:    Try loading font information for T1+lmtt on input line 227.
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [2]
 
-LaTeX Warning: File `/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/R
-tmptYZq5y/preview-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plo
-ts-1.pdf' not found on input line 300.
+LaTeX Warning: File `HomUHet_vignette_files/figure-latex/sol plots-1.pdf' not f
+ound on input line 300.
 
 
-</private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview-15
-0975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-1.pdf, id=27, 436
-.63126pt x 286.06876pt>
-File: /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/previ
-ew-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-1.pdf Graphi
-c file (type pdf)
-
-<use /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/previe
-w-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-1.pdf>
-Package pdftex.def Info: /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn
-/T/RtmptYZq5y/preview-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol
- plots-1.pdf used on input line 300.
+<HomUHet_vignette_files/figure-latex/sol plots-1.pdf, id=27, 436.63126pt x 286.
+06876pt>
+File: HomUHet_vignette_files/figure-latex/sol plots-1.pdf Graphic file (type pd
+f)
+<use HomUHet_vignette_files/figure-latex/sol plots-1.pdf>
+Package pdftex.def Info: HomUHet_vignette_files/figure-latex/sol plots-1.pdf us
+ed on input line 300.
 (pdftex.def)             Requested size: 436.63019pt x 286.06805pt.
 
-LaTeX Warning: File `/private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/R
-tmptYZq5y/preview-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plo
-ts-2.pdf' not found on input line 301.
+LaTeX Warning: File `HomUHet_vignette_files/figure-latex/sol plots-2.pdf' not f
+ound on input line 301.
 
 
-</private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview-15
-0975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-2.pdf, id=28, 436
-.63126pt x 286.06876pt>
-File: /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/previ
-ew-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-2.pdf Graphi
-c file (type pdf)
-
-<use /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/previe
-w-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-2.pdf>
-Package pdftex.def Info: /private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn
-/T/RtmptYZq5y/preview-150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol
- plots-2.pdf used on input line 301.
+<HomUHet_vignette_files/figure-latex/sol plots-2.pdf, id=28, 436.63126pt x 286.
+06876pt>
+File: HomUHet_vignette_files/figure-latex/sol plots-2.pdf Graphic file (type pd
+f)
+<use HomUHet_vignette_files/figure-latex/sol plots-2.pdf>
+Package pdftex.def Info: HomUHet_vignette_files/figure-latex/sol plots-2.pdf us
+ed on input line 301.
 (pdftex.def)             Requested size: 436.63019pt x 286.06805pt.
 
 Overfull \hbox (14.89058pt too wide) in paragraph at lines 300--302
@@ -1037,10 +1022,8 @@ Overfull \hbox (14.89058pt too wide) in paragraph at lines 300--302
 \T1/lmr/m/n/10 (-20) plots-2.pdf [] 
  []
 
-[3 </private/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview
--150975059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-1.pdf>] [4 </p
-rivate/var/folders/2j/2nnkvlgx7ngdxqvglh24v7fm0000gn/T/RtmptYZq5y/preview-15097
-5059a1ac.dir/HomUHet_vignette_files/figure-latex/sol plots-2.pdf>] [5] [6] [7]
+[3 <./HomUHet_vignette_files/figure-latex/sol plots-1.pdf>] [4 <./HomUHet_vigne
+tte_files/figure-latex/sol plots-2.pdf>] [5] [6] [7]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 631.
 [8]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 631.
@@ -1050,13 +1033,13 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 631.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 631.
  ) 
 Here is how much of TeX's memory you used:
- 13471 strings out of 492995
- 196336 string characters out of 6132704
+ 13470 strings out of 492995
+ 195210 string characters out of 6132704
  305069 words of memory out of 5000000
  16736 multiletter control sequences out of 15000+600000
  53616 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,6n,38p,644b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,6n,38p,550b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
 texlive/2017/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
 17/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2017/texmf-d
@@ -1069,7 +1052,7 @@ l/texlive/2017/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2
 ist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/
 type1/public/lm/lmtt10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/publ
 ic/lm/lmtti10.pfb>
-Output written on HomUHet_vignette.pdf (8 pages, 310558 bytes).
+Output written on HomUHet_vignette.pdf (8 pages, 310373 bytes).
 PDF statistics:
  144 PDF objects out of 1000 (max. 8388607)
  118 compressed objects within 2 object streams
